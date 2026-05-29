@@ -5,6 +5,8 @@ import { ProductGrid } from './product-grid'
 import { FilterSidebar } from './filter-sidebar'
 import { FadeIn } from '@/components/animations/fade-in'
 
+export const dynamic = 'force-dynamic'
+
 const DEFAULT_LIMIT = 12
 
 function parsePositiveInt(value: string | undefined, fallback: number) {

@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { ProductDetail } from './product-detail'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 interface ProductPageProps {
   params: Promise<{ slug: string }>
 }

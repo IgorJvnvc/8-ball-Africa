@@ -3,6 +3,8 @@ import { FadeIn } from '@/components/animations/fade-in'
 import { StaggerChildren, StaggerItem } from '@/components/animations/stagger-children'
 import { AnalyticsDashboard } from './analytics-dashboard'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminDashboard() {
   const [totalProducts, totalOrders, totalUsers, totalRevenue, recentOrders] = await Promise.all([
     prisma.product.count(),

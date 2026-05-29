@@ -1,7 +1,12 @@
 'use client'
 
+import { Suspense } from 'react'
 import { PageTransition } from '@/components/animations'
 
 export default function ShopTemplate({ children }: { children: React.ReactNode }) {
-  return <PageTransition>{children}</PageTransition>
+  return (
+    <Suspense fallback={children}>
+      <PageTransition>{children}</PageTransition>
+    </Suspense>
+  )
 }

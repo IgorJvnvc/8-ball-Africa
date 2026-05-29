@@ -7,6 +7,8 @@ import { ProductCard } from '@/components/ui/product-card'
 import { BrandMarquee } from '@/components/ui/brand-marquee'
 import { HeroSection } from '@/components/ui/hero-section'
 
+export const dynamic = 'force-dynamic'
+
 const SCENE_IMAGES = [
   {
     src: '/images/home/pool-hall-1.jpg',

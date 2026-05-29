@@ -4,18 +4,6 @@ import { prisma } from '@/lib/prisma'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://8ballafrica.com'
 
-  const [categories, products] = await Promise.all([
-    prisma.category.findMany({
-      select: { slug: true, updatedAt: true },
-      orderBy: { updatedAt: 'desc' },
-    }),
-    prisma.product.findMany({
-      where: { published: true },
-      select: { slug: true, updatedAt: true },
-      orderBy: { updatedAt: 'desc' },
-    }),
-  ])
-
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/`,
@@ -38,6 +26,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.4,
     },
   ]
+
+  let categories: Array<{ slug: string; updatedAt: Date }> = []
+  let products: Array<{ slug: string; updatedAt: Date }> = []
+
+  try {
+    ;[categories, products] = await Promise.all([
+      prisma.category.findMany({
+        select: { slug: true, updatedAt: true },
+        orderBy: { updatedAt: 'desc' },
+      }),
+      prisma.product.findMany({
+        where: { published: true },
+        select: { slug: true, updatedAt: true },
+        orderBy: { updatedAt: 'desc' },
+      }),
+    ])
+  } catch {
+    return staticRoutes
+  }
 
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${baseUrl}/products?category=${category.slug}`,
