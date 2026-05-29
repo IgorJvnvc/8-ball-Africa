@@ -8,6 +8,10 @@ A full-stack e-commerce platform for premium pool and billiards equipment, built
 ![Vitest](https://img.shields.io/badge/Vitest-81_tests-6E9F18?logo=vitest)
 ![Playwright](https://img.shields.io/badge/Playwright-4_E2E-2EAD33?logo=playwright)
 
+## Live Demo
+
+**[https://8-ball-africa.vercel.app/](https://8-ball-africa.vercel.app/)**
+
 ## Demo Credentials
 
 Use these seeded accounts to test the app quickly:

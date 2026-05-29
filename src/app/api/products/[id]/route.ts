@@ -56,6 +56,24 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       include: { category: true, images: true },
     })
 
+    if (Array.isArray(body.images)) {
+      await prisma.productImage.deleteMany({ where: { productId: id } })
+
+      const imageUrls = body.images
+        .map((url: unknown) => String(url).trim())
+        .filter((url: string) => url.length > 0)
+
+      if (imageUrls.length > 0) {
+        await prisma.productImage.createMany({
+          data: imageUrls.map((url: string, index: number) => ({
+            productId: id,
+            url,
+            sortOrder: index,
+          })),
+        })
+      }
+    }
+
     return NextResponse.json({ success: true, data: product })
   } catch (error) {
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })

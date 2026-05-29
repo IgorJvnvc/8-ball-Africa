@@ -133,6 +133,7 @@ export async function POST(req: NextRequest) {
         comparePrice: body.comparePrice,
         stock: body.stock,
         featured: body.featured || false,
+        published: body.published ?? true,
         categoryId: body.categoryId,
       },
       include: { category: true },
