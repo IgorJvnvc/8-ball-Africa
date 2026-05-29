@@ -13,7 +13,7 @@ export function Header() {
 
   const handleSignOut = useCallback(() => {
     clearCart()
-    void signOut()
+    void signOut({ callbackUrl: '/' })
   }, [clearCart])
 
   const navLinks = [
