@@ -5,6 +5,16 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import type { Role } from '@prisma/client'
 
+const googleProvider =
+  process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET
+    ? [
+        Google({
+          clientId: process.env.AUTH_GOOGLE_ID,
+          clientSecret: process.env.AUTH_GOOGLE_SECRET,
+        }),
+      ]
+    : []
+
 declare module 'next-auth' {
   interface User {
     role?: Role
@@ -29,10 +39,7 @@ declare module '@auth/core/jwt' {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-    }),
+    ...googleProvider,
     Credentials({
       name: 'credentials',
       credentials: {

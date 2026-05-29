@@ -3,16 +3,27 @@ import { prisma } from '@/lib/prisma'
 import { sendOrderInvoice } from '@/lib/email/send-order-invoice'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+function getStripeClient() {
+  const secretKey = process.env.STRIPE_SECRET_KEY
+  if (!secretKey) {
+    throw new Error('Stripe secret key is not configured')
+  }
+  return new Stripe(secretKey)
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const signature = req.headers.get('stripe-signature')!
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+
+  if (!webhookSecret) {
+    return NextResponse.json({ error: 'Stripe webhook secret is not configured' }, { status: 500 })
+  }
 
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
+    event = getStripeClient().webhooks.constructEvent(body, signature, webhookSecret)
   } catch (err) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }

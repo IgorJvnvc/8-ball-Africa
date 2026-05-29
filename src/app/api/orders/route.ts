@@ -4,7 +4,13 @@ import { auth } from '@/lib/auth'
 import { OrderStatus, Prisma } from '@prisma/client'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+function getStripeClient() {
+  const secretKey = process.env.STRIPE_SECRET_KEY
+  if (!secretKey) {
+    throw new Error('Stripe secret key is not configured')
+  }
+  return new Stripe(secretKey)
+}
 
 function parsePositiveInt(value: string | null, fallback: number) {
   const parsed = Number.parseInt(value ?? '', 10)
@@ -111,8 +117,16 @@ export async function POST(req: NextRequest) {
     const shippingCost = subtotal > 500 ? 0 : 25 // Free shipping over $500
     const total = subtotal + shippingCost
 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL
+    if (!appUrl) {
+      return NextResponse.json(
+        { success: false, error: 'App URL is not configured' },
+        { status: 500 },
+      )
+    }
+
     // Create Stripe checkout session
-    const stripeSession = await stripe.checkout.sessions.create({
+    const stripeSession = await getStripeClient().checkout.sessions.create({
       payment_method_types: ['card'],
       customer_email: session.user.email,
       line_items: cartItems.map((item) => ({
@@ -127,8 +141,8 @@ export async function POST(req: NextRequest) {
         quantity: item.quantity,
       })),
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/orders?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cart`,
+      success_url: `${appUrl}/orders?success=true`,
+      cancel_url: `${appUrl}/cart`,
       metadata: { userId: session.user.id, addressId: resolvedAddressId || '' },
     })
 
