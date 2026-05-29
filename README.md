@@ -52,6 +52,7 @@ Use these seeded accounts to test the app quickly:
 - Automated purchase email with PDF invoice attachment (Resend + React Email + React PDF)
 - Admin dashboard with analytics charts powered by Recharts
 - Admin management pages for categories, products, orders, and users
+- Admin product image upload via Vercel Blob, with URL input fallback
 - Credentials auth and Google OAuth with role-based route protection
 - SEO + PWA essentials (`sitemap`, `robots`, Open Graph metadata, manifest, icons)
 - 81 unit tests (Vitest) and 4 E2E smoke tests (Playwright)
@@ -64,6 +65,7 @@ Use these seeded accounts to test the app quickly:
 | Language   | TypeScript 5                               |
 | Database   | PostgreSQL (Docker local, Neon production) |
 | ORM        | Prisma 5                                   |
+| Storage    | Vercel Blob (product image uploads)        |
 | Auth       | NextAuth v5 (credentials + Google)         |
 | Payments   | Stripe Checkout + Webhooks                 |
 | Email      | Resend + React Email                       |
@@ -137,6 +139,7 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 | POST   | `/api/auth/register`     | Public     | Register new user                        |
 | GET    | `/api/products`          | Public     | List products (filterable + paginated)   |
 | POST   | `/api/products`          | Admin      | Create product                           |
+| POST   | `/api/upload`            | Admin      | Upload product image (max 4MB)           |
 | GET    | `/api/products/:id`      | Public     | Get product details                      |
 | PUT    | `/api/products/:id`      | Admin      | Update product                           |
 | DELETE | `/api/products/:id`      | Admin      | Delete product                           |
