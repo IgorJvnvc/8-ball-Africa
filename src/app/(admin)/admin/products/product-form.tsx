@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export type ProductFormValues = {
@@ -45,18 +45,27 @@ function slugify(value: string) {
     .replace(/-+/g, '-')
 }
 
+const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+
 export function ProductForm({ mode, initialValues, categories, onSubmit }: ProductFormProps) {
   const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [formValues, setFormValues] = useState<ProductFormValues>(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [slugTouched, setSlugTouched] = useState(Boolean(initialValues.slug.trim()))
+  const [imageInputMode, setImageInputMode] = useState<'url' | 'upload'>('url')
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null)
+  const [uploadPreviewUrl, setUploadPreviewUrl] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
 
   const title = mode === 'create' ? 'Create Product' : 'Edit Product'
   const subtitle =
     mode === 'create'
       ? 'Add a new product to your storefront catalog.'
-      : 'Update product details and image URLs.'
+      : 'Update product details, image URLs, and uploads.'
   const submitLabel = mode === 'create' ? 'Create Product' : 'Save Changes'
 
   const imageUrls = useMemo(
@@ -78,6 +87,26 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
     }))
   }
 
+  const addImageUrlToList = (url: string) => {
+    const normalizedUrl = url.trim()
+    if (!normalizedUrl) {
+      return
+    }
+
+    setFormValues((prev) => {
+      const emptyIndex = prev.images.findIndex((image) => image.trim().length === 0)
+
+      if (emptyIndex >= 0) {
+        return {
+          ...prev,
+          images: prev.images.map((image, index) => (index === emptyIndex ? normalizedUrl : image)),
+        }
+      }
+
+      return { ...prev, images: [...prev.images, normalizedUrl] }
+    })
+  }
+
   const addImage = () => {
     setFormValues((prev) => ({ ...prev, images: [...prev.images, ''] }))
   }
@@ -89,10 +118,99 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
     })
   }
 
+  const resetUploadState = () => {
+    setSelectedImageFile(null)
+    setUploadPreviewUrl(null)
+    setUploadError(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (uploadPreviewUrl) {
+        URL.revokeObjectURL(uploadPreviewUrl)
+      }
+    }
+  }, [uploadPreviewUrl])
+
+  const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null
+    setUploadError(null)
+
+    if (!file) {
+      setSelectedImageFile(null)
+      setUploadPreviewUrl(null)
+      return
+    }
+
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      setUploadError('Unsupported file type. Use JPG, PNG, WEBP, or GIF.')
+      setSelectedImageFile(null)
+      setUploadPreviewUrl(null)
+      event.target.value = ''
+      return
+    }
+
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      setUploadError('File is too large (max 4MB).')
+      setSelectedImageFile(null)
+      setUploadPreviewUrl(null)
+      event.target.value = ''
+      return
+    }
+
+    setSelectedImageFile(file)
+    setUploadPreviewUrl(URL.createObjectURL(file))
+  }
+
+  const uploadSelectedImage = async () => {
+    if (!selectedImageFile) {
+      setUploadError('Select an image before uploading.')
+      return
+    }
+
+    setUploadError(null)
+    setIsUploadingImage(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', selectedImageFile)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = (await res.json()) as {
+        success: boolean
+        error?: string
+        data?: { url?: string }
+      }
+
+      const uploadedUrl = data.data?.url?.trim()
+
+      if (!res.ok || !data.success || !uploadedUrl) {
+        setUploadError(data.error || 'Failed to upload image')
+        return
+      }
+
+      addImageUrlToList(uploadedUrl)
+      resetUploadState()
+    } catch {
+      setUploadError('Failed to upload image')
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }
+
   const resetToInitial = () => {
     setFormValues(initialValues)
     setError(null)
     setSlugTouched(Boolean(initialValues.slug.trim()))
+    setImageInputMode('url')
+    resetUploadState()
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -364,36 +482,150 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
 
         <section>
           <h2 className="text-text text-sm font-semibold tracking-wide uppercase">Images</h2>
-          <p className="text-text-muted mt-1 text-sm">Provide one or more image URLs.</p>
+          <p className="text-text-muted mt-1 text-sm">Choose how you want to add product images.</p>
 
-          <div className="mt-3 space-y-3">
-            {formValues.images.map((image, index) => (
-              <div key={`image-${index}`} className="flex items-center gap-2">
-                <input
-                  type="url"
-                  value={image}
-                  onChange={(event) => updateImage(index, event.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="text-danger hover:border-danger/60 rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-
+          <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={addImage}
-              className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors"
+              onClick={() => {
+                setImageInputMode('url')
+                setUploadError(null)
+              }}
+              className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                imageInputMode === 'url'
+                  ? 'bg-primary/10 text-primary border-primary/40'
+                  : 'text-text hover:border-primary-light hover:text-primary-light border-white/10'
+              }`}
             >
-              + Add Image URL
+              Add via URL
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setImageInputMode('upload')
+                setUploadError(null)
+              }}
+              className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                imageInputMode === 'upload'
+                  ? 'bg-primary/10 text-primary border-primary/40'
+                  : 'text-text hover:border-primary-light hover:text-primary-light border-white/10'
+              }`}
+            >
+              Upload image
             </button>
           </div>
+
+          {imageInputMode === 'url' ? (
+            <div className="mt-3 space-y-3">
+              {formValues.images.map((image, index) => (
+                <div key={`image-${index}`} className="flex items-center gap-2">
+                  <input
+                    type="url"
+                    value={image}
+                    onChange={(event) => updateImage(index, event.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="text-danger hover:border-danger/60 rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={addImage}
+                className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                + Add Image URL
+              </button>
+            </div>
+          ) : (
+            <div className="mt-3 space-y-3">
+              <div className="bg-background/60 rounded-lg border border-white/10 p-4">
+                <label
+                  htmlFor="product-image-upload"
+                  className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+                >
+                  Select Image
+                </label>
+                <input
+                  ref={fileInputRef}
+                  id="product-image-upload"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleImageFileChange}
+                  disabled={isSubmitting || isUploadingImage}
+                  className="text-text mt-2 block w-full text-sm file:mr-3 file:cursor-pointer file:rounded-lg file:border file:border-white/10 file:bg-transparent file:px-3 file:py-2 file:text-sm file:font-medium"
+                />
+                <p className="text-text-muted mt-2 text-xs">JPG, PNG, WEBP, or GIF up to 4MB.</p>
+
+                {uploadPreviewUrl && (
+                  <div className="mt-3 flex items-center gap-3">
+                    <div
+                      aria-label="Selected image preview"
+                      className="h-16 w-16 rounded-lg border border-white/10 bg-cover bg-center"
+                      style={{ backgroundImage: `url('${uploadPreviewUrl}')` }}
+                    />
+                    <p className="text-text text-sm">{selectedImageFile?.name}</p>
+                  </div>
+                )}
+
+                {uploadError && (
+                  <div className="border-danger/30 bg-danger/10 text-danger mt-3 rounded-lg border px-3 py-2 text-sm">
+                    {uploadError}
+                  </div>
+                )}
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void uploadSelectedImage()}
+                    disabled={!selectedImageFile || isSubmitting || isUploadingImage}
+                    className="bg-primary hover:bg-primary-light rounded-lg px-3 py-2 text-sm font-semibold text-white transition-colors disabled:opacity-60"
+                  >
+                    {isUploadingImage ? 'Uploading...' : 'Upload & Add URL'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetUploadState}
+                    disabled={isSubmitting || isUploadingImage}
+                    className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors disabled:opacity-60"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <p className="text-text-muted text-sm">
+                  Uploaded images are stored as URLs and can be reviewed below.
+                </p>
+                {formValues.images.map((image, index) => (
+                  <div key={`uploaded-image-${index}`} className="flex items-center gap-2">
+                    <input
+                      type="url"
+                      value={image}
+                      onChange={(event) => updateImage(index, event.target.value)}
+                      placeholder="https://example.com/image.jpg"
+                      className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="text-danger hover:border-danger/60 rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         <section>
