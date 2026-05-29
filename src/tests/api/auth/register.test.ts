@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import {
-  prismaMock,
-  createMockRequest,
-  parseResponse,
-  mockUser,
-} from '@/tests/helpers/test-utils'
+import { prismaMock, createMockRequest, parseResponse, mockUser } from '@/tests/helpers/test-utils'
 import { POST } from '@/app/api/auth/register/route'
 
 describe('POST /api/auth/register', () => {

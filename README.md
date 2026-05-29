@@ -54,23 +54,23 @@ Use these seeded accounts to test the app quickly:
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript 5 |
-| Database | PostgreSQL (Docker local, Neon production) |
-| ORM | Prisma 5 |
-| Auth | NextAuth v5 (credentials + Google) |
-| Payments | Stripe Checkout + Webhooks |
-| Email | Resend + React Email |
-| PDF | @react-pdf/renderer |
-| State | Zustand (cart), URL params (filters) |
-| Styling | Tailwind CSS |
-| Animations | Framer Motion |
-| Charts | Recharts |
-| Validation | Zod v4 |
-| Testing | Vitest + Playwright |
-| CI/CD | GitHub Actions |
+| Layer      | Technology                                 |
+| ---------- | ------------------------------------------ |
+| Framework  | Next.js 16 (App Router)                    |
+| Language   | TypeScript 5                               |
+| Database   | PostgreSQL (Docker local, Neon production) |
+| ORM        | Prisma 5                                   |
+| Auth       | NextAuth v5 (credentials + Google)         |
+| Payments   | Stripe Checkout + Webhooks                 |
+| Email      | Resend + React Email                       |
+| PDF        | @react-pdf/renderer                        |
+| State      | Zustand (cart), URL params (filters)       |
+| Styling    | Tailwind CSS                               |
+| Animations | Framer Motion                              |
+| Charts     | Recharts                                   |
+| Validation | Zod v4                                     |
+| Testing    | Vitest + Playwright                        |
+| CI/CD      | GitHub Actions                             |
 
 ## Getting Started
 
@@ -128,31 +128,31 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 ## API Endpoints
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/auth/register` | Public | Register new user |
-| GET | `/api/products` | Public | List products (filterable + paginated) |
-| POST | `/api/products` | Admin | Create product |
-| GET | `/api/products/:id` | Public | Get product details |
-| PUT | `/api/products/:id` | Admin | Update product |
-| DELETE | `/api/products/:id` | Admin | Delete product |
-| GET | `/api/categories` | Public | List categories (search + pagination) |
-| POST | `/api/categories` | Admin | Create category |
-| PUT | `/api/categories/:id` | Admin | Update category |
-| DELETE | `/api/categories/:id` | Admin | Delete category |
-| GET | `/api/cart` | User | Get cart items |
-| POST | `/api/cart/items` | User | Add to cart |
-| PUT | `/api/cart/items/:id` | User | Update quantity |
-| DELETE | `/api/cart/items/:id` | User | Remove item |
-| GET | `/api/orders` | User/Admin | List orders |
-| POST | `/api/orders` | User | Create order and Stripe checkout session |
-| PUT | `/api/orders/:id/status` | Admin | Update order status |
-| GET | `/api/orders/:id/stream` | User | Order status stream |
-| GET | `/api/users` | Admin | List users |
-| PUT | `/api/users/:id` | Admin | Update user role |
-| DELETE | `/api/users/:id` | Admin | Delete user |
-| GET | `/api/admin/analytics` | Admin | Dashboard analytics data |
-| POST | `/api/webhooks/stripe` | Stripe | Payment webhook handler |
+| Method | Endpoint                 | Auth       | Description                              |
+| ------ | ------------------------ | ---------- | ---------------------------------------- |
+| POST   | `/api/auth/register`     | Public     | Register new user                        |
+| GET    | `/api/products`          | Public     | List products (filterable + paginated)   |
+| POST   | `/api/products`          | Admin      | Create product                           |
+| GET    | `/api/products/:id`      | Public     | Get product details                      |
+| PUT    | `/api/products/:id`      | Admin      | Update product                           |
+| DELETE | `/api/products/:id`      | Admin      | Delete product                           |
+| GET    | `/api/categories`        | Public     | List categories (search + pagination)    |
+| POST   | `/api/categories`        | Admin      | Create category                          |
+| PUT    | `/api/categories/:id`    | Admin      | Update category                          |
+| DELETE | `/api/categories/:id`    | Admin      | Delete category                          |
+| GET    | `/api/cart`              | User       | Get cart items                           |
+| POST   | `/api/cart/items`        | User       | Add to cart                              |
+| PUT    | `/api/cart/items/:id`    | User       | Update quantity                          |
+| DELETE | `/api/cart/items/:id`    | User       | Remove item                              |
+| GET    | `/api/orders`            | User/Admin | List orders                              |
+| POST   | `/api/orders`            | User       | Create order and Stripe checkout session |
+| PUT    | `/api/orders/:id/status` | Admin      | Update order status                      |
+| GET    | `/api/orders/:id/stream` | User       | Order status stream                      |
+| GET    | `/api/users`             | Admin      | List users                               |
+| PUT    | `/api/users/:id`         | Admin      | Update user role                         |
+| DELETE | `/api/users/:id`         | Admin      | Delete user                              |
+| GET    | `/api/admin/analytics`   | Admin      | Dashboard analytics data                 |
+| POST   | `/api/webhooks/stripe`   | Stripe     | Payment webhook handler                  |
 
 ## Project Structure
 

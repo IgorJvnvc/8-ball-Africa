@@ -38,13 +38,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/5 bg-surface">
+      <aside className="bg-surface fixed top-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-white/5">
         {/* Logo */}
         <div className="flex h-16 items-center gap-2 border-b border-white/5 px-6">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+          <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full">
             <span className="text-xs font-bold text-white">8</span>
           </div>
-          <span className="text-sm font-bold text-text">
+          <span className="text-text text-sm font-bold">
             Admin <span className="text-primary-light">Panel</span>
           </span>
         </div>
@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {isActive && (
                   <motion.div
                     layoutId="admin-nav-active"
-                    className="absolute inset-0 rounded-lg bg-primary/10"
+                    className="bg-primary/10 absolute inset-0 rounded-lg"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
                 )}
@@ -93,7 +93,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="border-t border-white/5 p-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-text-muted hover:text-text"
+            className="text-text-muted hover:text-text flex items-center gap-2 text-sm"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

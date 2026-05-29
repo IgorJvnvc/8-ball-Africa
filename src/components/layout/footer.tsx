@@ -22,20 +22,20 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 bg-background">
+    <footer className="bg-background border-t border-white/5">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary">
+              <div className="bg-primary flex h-9 w-9 items-center justify-center rounded-full">
                 <span className="text-sm font-bold text-white">8</span>
               </div>
-              <span className="text-lg font-bold text-text">
+              <span className="text-text text-lg font-bold">
                 8-ball <span className="text-primary-light">Africa</span>
               </span>
             </div>
-            <p className="text-sm text-text-muted">
+            <p className="text-text-muted text-sm">
               Premium pool equipment for players across Africa. From beginner to professional, we
               have everything you need to elevate your game.
             </p>
@@ -43,13 +43,13 @@ export function Footer() {
 
           {/* Shop */}
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text">Shop</h3>
+            <h3 className="text-text mb-4 text-sm font-semibold tracking-wider uppercase">Shop</h3>
             <ul className="space-y-2">
               {footerLinks.shop.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-muted transition-colors hover:text-text"
+                    className="text-text-muted hover:text-text text-sm transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -60,7 +60,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text">
+            <h3 className="text-text mb-4 text-sm font-semibold tracking-wider uppercase">
               Company
             </h3>
             <ul className="space-y-2">
@@ -68,7 +68,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-muted transition-colors hover:text-text"
+                    className="text-text-muted hover:text-text text-sm transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -79,21 +79,21 @@ export function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text">
+            <h3 className="text-text mb-4 text-sm font-semibold tracking-wider uppercase">
               Stay Updated
             </h3>
-            <p className="mb-4 text-sm text-text-muted">
+            <p className="text-text-muted mb-4 text-sm">
               Get the latest deals and product drops straight to your inbox.
             </p>
             <form className="flex gap-2">
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="flex-1 rounded-lg border border-white/10 bg-surface px-3 py-2 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="bg-surface text-text placeholder:text-text-dark focus:border-primary focus:ring-primary flex-1 rounded-lg border border-white/10 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
               />
               <button
                 type="submit"
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-light"
+                className="bg-primary hover:bg-primary-light rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
               >
                 Join
               </button>
@@ -103,7 +103,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 sm:flex-row">
-          <p className="text-xs text-text-dark">
+          <p className="text-text-dark text-xs">
             &copy; {new Date().getFullYear()} 8-ball Africa. All rights reserved.
           </p>
           <div className="flex gap-4">
@@ -111,7 +111,7 @@ export function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-xs text-text-dark transition-colors hover:text-text-muted"
+                className="text-text-dark hover:text-text-muted text-xs transition-colors"
               >
                 {link.label}
               </Link>

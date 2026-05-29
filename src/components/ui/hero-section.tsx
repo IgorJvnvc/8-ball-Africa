@@ -5,18 +5,18 @@ import Link from 'next/link'
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-surface to-primary-dark/20">
+    <section className="from-background via-surface to-primary-dark/20 relative overflow-hidden bg-gradient-to-br">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-          className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-primary/5"
+          className="bg-primary/5 absolute -top-20 -right-20 h-96 w-96 rounded-full"
         />
         <motion.div
           animate={{ rotate: -360 }}
           transition={{ duration: 80, repeat: Infinity, ease: 'linear' }}
-          className="absolute -bottom-32 -left-32 h-[500px] w-[500px] rounded-full bg-accent/5"
+          className="bg-accent/5 absolute -bottom-32 -left-32 h-[500px] w-[500px] rounded-full"
         />
       </div>
 
@@ -27,7 +27,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary-light">
+            <span className="bg-primary/10 text-primary-light inline-block rounded-full px-4 py-1.5 text-xs font-semibold">
               Premium Pool Equipment
             </span>
           </motion.div>
@@ -36,10 +36,10 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-6 text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl"
+            className="text-text mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
           >
             Elevate Your{' '}
-            <span className="bg-gradient-to-r from-primary-light to-accent bg-clip-text text-transparent">
+            <span className="from-primary-light to-accent bg-gradient-to-r bg-clip-text text-transparent">
               Game
             </span>
           </motion.h1>
@@ -48,7 +48,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg text-text-muted sm:text-xl"
+            className="text-text-muted mt-6 text-lg sm:text-xl"
           >
             Professional-grade pool tables, cues, and accessories from the world&apos;s top brands.
             Delivered across Africa.
@@ -62,13 +62,13 @@ export function HeroSection() {
           >
             <Link
               href="/products"
-              className="rounded-xl bg-primary px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-light hover:shadow-primary-light/25 hover:scale-105"
+              className="bg-primary shadow-primary/25 hover:bg-primary-light hover:shadow-primary-light/25 rounded-xl px-8 py-4 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105"
             >
               Shop Now
             </Link>
             <Link
               href="/products?category=pool-tables"
-              className="rounded-xl border border-white/10 px-8 py-4 text-sm font-semibold text-text transition-all hover:border-primary-light hover:text-primary-light"
+              className="text-text hover:border-primary-light hover:text-primary-light rounded-xl border border-white/10 px-8 py-4 text-sm font-semibold transition-all"
             >
               View Tables
             </Link>
@@ -80,7 +80,7 @@ export function HeroSection() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="absolute right-8 top-1/2 hidden -translate-y-1/2 lg:block"
+          className="absolute top-1/2 right-8 hidden -translate-y-1/2 lg:block"
         >
           <motion.div
             animate={{ y: [-10, 10, -10] }}

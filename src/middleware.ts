@@ -7,7 +7,8 @@ export default auth((req) => {
   const isAdmin = req.auth?.user?.role === 'ADMIN'
 
   const isAdminRoute = nextUrl.pathname.startsWith('/admin')
-  const isAuthRoute = nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/register')
+  const isAuthRoute =
+    nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/register')
   const isApiRoute = nextUrl.pathname.startsWith('/api')
 
   // Allow API routes to handle their own auth

@@ -34,7 +34,9 @@ describe('PUT /api/categories/:id', () => {
       },
     })
 
-    const { status, body } = await parseResponse(await PUT(req, { params: Promise.resolve({ id: 'cat-1' }) }))
+    const { status, body } = await parseResponse(
+      await PUT(req, { params: Promise.resolve({ id: 'cat-1' }) }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)
@@ -49,7 +51,9 @@ describe('PUT /api/categories/:id', () => {
       body: { name: 'Should Fail', slug: 'should-fail' },
     })
 
-    const { status, body } = await parseResponse(await PUT(req, { params: Promise.resolve({ id: 'cat-1' }) }))
+    const { status, body } = await parseResponse(
+      await PUT(req, { params: Promise.resolve({ id: 'cat-1' }) }),
+    )
 
     expect(status).toBe(403)
     expect(body.success).toBe(false)

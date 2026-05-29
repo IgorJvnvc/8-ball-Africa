@@ -150,7 +150,9 @@ describe('PUT /api/cart/items/:id', () => {
     prismaMock.cartItem.update.mockResolvedValue(mockCartItem({ quantity: 3 }))
 
     const req = createMockRequest({ method: 'PUT', body: { quantity: 3 } })
-    const { status, body } = await parseResponse(await PUT(req, { params: mockParams('cart-item-1') }))
+    const { status, body } = await parseResponse(
+      await PUT(req, { params: mockParams('cart-item-1') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)
@@ -161,7 +163,9 @@ describe('PUT /api/cart/items/:id', () => {
     prismaMock.cartItem.delete.mockResolvedValue(mockCartItem())
 
     const req = createMockRequest({ method: 'PUT', body: { quantity: 0 } })
-    const { status, body } = await parseResponse(await PUT(req, { params: mockParams('cart-item-1') }))
+    const { status, body } = await parseResponse(
+      await PUT(req, { params: mockParams('cart-item-1') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)
@@ -189,7 +193,9 @@ describe('DELETE /api/cart/items/:id', () => {
     prismaMock.cartItem.delete.mockResolvedValue(mockCartItem())
 
     const req = createMockRequest({ method: 'DELETE' })
-    const { status, body } = await parseResponse(await DELETE(req, { params: mockParams('cart-item-1') }))
+    const { status, body } = await parseResponse(
+      await DELETE(req, { params: mockParams('cart-item-1') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)

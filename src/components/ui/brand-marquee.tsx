@@ -19,7 +19,7 @@ const BRANDS: Brand[] = [
 
 function BrandPill({ brand }: { brand: Brand }) {
   return (
-    <div className="group flex min-w-[180px] items-center gap-3 rounded-full border border-white/10 bg-background/80 px-4 py-2.5 text-text-muted transition-colors hover:border-primary-light/40 hover:text-text">
+    <div className="group bg-background/80 text-text-muted hover:border-primary-light/40 hover:text-text flex min-w-[180px] items-center gap-3 rounded-full border border-white/10 px-4 py-2.5 transition-colors">
       <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-black shadow-inner shadow-white/20">
         <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black">
           8
@@ -27,7 +27,7 @@ function BrandPill({ brand }: { brand: Brand }) {
       </span>
       <span className="flex items-baseline gap-2">
         <span className="text-sm font-semibold tracking-wide">{brand.name}</span>
-        <span className="text-[11px] uppercase tracking-[0.16em] text-text-dark">{brand.tag}</span>
+        <span className="text-text-dark text-[11px] tracking-[0.16em] uppercase">{brand.tag}</span>
       </span>
     </div>
   )
@@ -39,7 +39,7 @@ export function BrandMarquee() {
   const bottomRow = [...offsetBrands, ...offsetBrands]
 
   return (
-    <section className="border-y border-white/5 bg-surface/40">
+    <section className="bg-surface/40 border-y border-white/5">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -48,17 +48,17 @@ export function BrandMarquee() {
           transition={{ duration: 0.45, ease: 'easeOut' }}
           className="text-center"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent-light">
+          <p className="text-accent-light text-xs font-semibold tracking-[0.22em] uppercase">
             Trusted Equipment Partners
           </p>
-          <h2 className="mt-3 text-2xl font-bold text-text sm:text-3xl">
+          <h2 className="text-text mt-3 text-2xl font-bold sm:text-3xl">
             Built Around the Brands Pros Play With
           </h2>
         </motion.div>
 
         <div className="relative mt-9 overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-surface to-transparent sm:w-24" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-surface to-transparent sm:w-24" />
+          <div className="from-surface pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r to-transparent sm:w-24" />
+          <div className="from-surface pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l to-transparent sm:w-24" />
 
           <div className="brand-marquee-track py-2">
             {topRow.map((brand, index) => (

@@ -182,7 +182,10 @@ async function main() {
       stock: 15,
       featured: true,
       categoryId: cues.id,
-      images: ['/images/products/predator-revo-1-v2.jpg', '/images/products/predator-revo-2-v2.jpg'],
+      images: [
+        '/images/products/predator-revo-1-v2.jpg',
+        '/images/products/predator-revo-2-v2.jpg',
+      ],
     },
     {
       name: 'Mezz EC7-WM Cue',
@@ -372,7 +375,8 @@ async function main() {
     {
       name: 'Aramith Tournament Wooden Rack',
       slug: 'aramith-tournament-rack',
-      description: 'Precision-crafted hardwood triangle rack for tight, consistent racks every time.',
+      description:
+        'Precision-crafted hardwood triangle rack for tight, consistent racks every time.',
       brand: 'Aramith',
       price: 45,
       stock: 20,
@@ -722,8 +726,7 @@ async function main() {
     {
       name: 'McDermott Billiard Glove',
       slug: 'mcdermott-billiard-glove',
-      description:
-        'Breathable three-finger glove with secure fit and low-friction bridge surface.',
+      description: 'Breathable three-finger glove with secure fit and low-friction bridge surface.',
       brand: 'McDermott',
       price: 18,
       stock: 35,
@@ -800,8 +803,7 @@ async function main() {
     {
       name: 'OB Cues 1x1 Hard Case',
       slug: 'ob-cues-1x1-hard-case',
-      description:
-        'Compact hard-shell case with secure closure for one butt and one shaft setup.',
+      description: 'Compact hard-shell case with secure closure for one butt and one shaft setup.',
       brand: 'OB Cues',
       price: 95,
       stock: 15,

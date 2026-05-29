@@ -14,7 +14,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const stream = new ReadableStream({
     start(controller) {
       // Send initial connection event
-      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'connected', orderId: id })}\n\n`))
+      controller.enqueue(
+        encoder.encode(`data: ${JSON.stringify({ type: 'connected', orderId: id })}\n\n`),
+      )
 
       // In production, this would subscribe to a pub/sub system (Redis, etc.)
       // For demo purposes, we'll send a heartbeat every 30 seconds

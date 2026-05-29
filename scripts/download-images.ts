@@ -126,7 +126,7 @@ async function searchPhotos(query: string, perPage = 30): Promise<UnsplashPhoto[
   if (response.status === 403 || response.status === 429) {
     const remaining = response.headers.get('x-ratelimit-remaining')
     throw new Error(
-      `Unsplash API rate limit reached (status ${response.status}, remaining ${remaining ?? 'unknown'}).`
+      `Unsplash API rate limit reached (status ${response.status}, remaining ${remaining ?? 'unknown'}).`,
     )
   }
 
@@ -137,7 +137,9 @@ async function searchPhotos(query: string, perPage = 30): Promise<UnsplashPhoto[
 
   const body = (await response.json()) as { results?: UnsplashPhoto[] }
   const remaining = response.headers.get('x-ratelimit-remaining')
-  console.log(`search ${searchRequestCount}/${SEARCH_REQUEST_BUDGET}: "${query}" (${remaining ?? '?' } left)`)
+  console.log(
+    `search ${searchRequestCount}/${SEARCH_REQUEST_BUDGET}: "${query}" (${remaining ?? '?'} left)`,
+  )
 
   return body.results ?? []
 }
@@ -190,7 +192,7 @@ function pickNextPhoto(
   pool: UnsplashPhoto[],
   cursors: Map<string, number>,
   usedInProduct: Set<string>,
-  usedGlobally: Set<string>
+  usedGlobally: Set<string>,
 ): UnsplashPhoto {
   if (pool.length === 0) {
     throw new Error(`Cannot pick a photo from an empty pool: ${key}`)
@@ -281,7 +283,7 @@ async function main() {
         product,
         imageUrl: image.url,
         imageIndex: index,
-      }))
+      })),
   )
 
   if (targets.length === 0) {
@@ -345,7 +347,9 @@ async function main() {
   }
 
   let globalPool = dedupePhotos(
-    Array.from(categoryPools.values()).flatMap((pool) => pool).concat(Array.from(brandPools.values()).flatMap((pool) => pool))
+    Array.from(categoryPools.values())
+      .flatMap((pool) => pool)
+      .concat(Array.from(brandPools.values()).flatMap((pool) => pool)),
   )
 
   if (globalPool.length === 0 && searchRequestCount < SEARCH_REQUEST_BUDGET) {
@@ -397,7 +401,7 @@ async function main() {
         brandPool,
         cursors,
         usedInProduct,
-        globallyUsedPhotoIds
+        globallyUsedPhotoIds,
       )
     }
 
@@ -407,7 +411,7 @@ async function main() {
         categoryPool,
         cursors,
         usedInProduct,
-        globallyUsedPhotoIds
+        globallyUsedPhotoIds,
       )
     }
 
@@ -417,12 +421,18 @@ async function main() {
         brandPool,
         cursors,
         usedInProduct,
-        globallyUsedPhotoIds
+        globallyUsedPhotoIds,
       )
     }
 
     if (!selectedPhoto) {
-      selectedPhoto = pickNextPhoto('global', globalPool, cursors, usedInProduct, globallyUsedPhotoIds)
+      selectedPhoto = pickNextPhoto(
+        'global',
+        globalPool,
+        cursors,
+        usedInProduct,
+        globallyUsedPhotoIds,
+      )
     }
 
     usedInProduct.add(selectedPhoto.id)

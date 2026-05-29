@@ -54,13 +54,13 @@ export default function RegisterPage() {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md"
     >
-      <div className="rounded-2xl border border-white/5 bg-surface p-8 shadow-xl">
+      <div className="bg-surface rounded-2xl border border-white/5 p-8 shadow-xl">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+          <div className="bg-primary mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
             <span className="text-lg font-bold text-white">8</span>
           </div>
-          <h1 className="text-2xl font-bold text-text">Create an account</h1>
-          <p className="mt-2 text-sm text-text-muted">Join 8-ball Africa today</p>
+          <h1 className="text-text text-2xl font-bold">Create an account</h1>
+          <p className="text-text-muted mt-2 text-sm">Join 8-ball Africa today</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,14 +68,14 @@ export default function RegisterPage() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-lg bg-danger/10 px-4 py-3 text-sm text-danger"
+              className="bg-danger/10 text-danger rounded-lg px-4 py-3 text-sm"
             >
               {error}
             </motion.div>
           )}
 
           <div>
-            <label htmlFor="name" className="mb-1 block text-sm font-medium text-text-muted">
+            <label htmlFor="name" className="text-text-muted mb-1 block text-sm font-medium">
               Full Name
             </label>
             <input
@@ -84,13 +84,13 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="bg-background text-text placeholder:text-text-dark focus:border-primary focus:ring-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:ring-1 focus:outline-none"
               placeholder="John Doe"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-text-muted">
+            <label htmlFor="email" className="text-text-muted mb-1 block text-sm font-medium">
               Email
             </label>
             <input
@@ -99,13 +99,13 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="bg-background text-text placeholder:text-text-dark focus:border-primary focus:ring-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:ring-1 focus:outline-none"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-text-muted">
+            <label htmlFor="password" className="text-text-muted mb-1 block text-sm font-medium">
               Password
             </label>
             <input
@@ -114,7 +114,7 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="bg-background text-text placeholder:text-text-dark focus:border-primary focus:ring-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:ring-1 focus:outline-none"
               placeholder="••••••••"
             />
           </div>
@@ -122,7 +122,7 @@ export default function RegisterPage() {
           <div>
             <label
               htmlFor="confirmPassword"
-              className="mb-1 block text-sm font-medium text-text-muted"
+              className="text-text-muted mb-1 block text-sm font-medium"
             >
               Confirm Password
             </label>
@@ -132,7 +132,7 @@ export default function RegisterPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="bg-background text-text placeholder:text-text-dark focus:border-primary focus:ring-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:ring-1 focus:outline-none"
               placeholder="••••••••"
             />
           </div>
@@ -141,13 +141,13 @@ export default function RegisterPage() {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-light disabled:opacity-50"
+            className="bg-primary hover:bg-primary-light w-full rounded-lg py-3 text-sm font-semibold text-white transition-colors disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </motion.button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-text-muted">
+        <p className="text-text-muted mt-6 text-center text-sm">
           Already have an account?{' '}
           <Link href="/login" className="text-primary-light hover:underline">
             Sign in

@@ -191,7 +191,14 @@ describe('POST /api/products', () => {
 
     const req = createMockRequest({
       method: 'POST',
-      body: { name: 'Hack Product', slug: 'hack', brand: 'X', price: 1, stock: 1, categoryId: 'cat-1' },
+      body: {
+        name: 'Hack Product',
+        slug: 'hack',
+        brand: 'X',
+        price: 1,
+        stock: 1,
+        categoryId: 'cat-1',
+      },
     })
 
     const { status, body } = await parseResponse(await POST(req))

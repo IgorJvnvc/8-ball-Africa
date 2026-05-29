@@ -114,7 +114,7 @@ export function AnalyticsDashboard() {
 
   if (loading) {
     return (
-      <div className="mt-8 rounded-xl border border-white/5 bg-surface p-6 text-sm text-text-muted">
+      <div className="bg-surface text-text-muted mt-8 rounded-xl border border-white/5 p-6 text-sm">
         Loading analytics...
       </div>
     )
@@ -122,7 +122,7 @@ export function AnalyticsDashboard() {
 
   if (error || !analytics) {
     return (
-      <div className="mt-8 rounded-xl border border-danger/30 bg-danger/5 p-6 text-sm text-danger">
+      <div className="border-danger/30 bg-danger/5 text-danger mt-8 rounded-xl border p-6 text-sm">
         {error || 'Unable to load analytics'}
       </div>
     )
@@ -139,36 +139,38 @@ export function AnalyticsDashboard() {
     <div className="mt-8 space-y-8">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <FadeIn>
-          <div className="rounded-xl border border-white/5 bg-surface p-5">
-            <p className="text-xs uppercase tracking-wider text-text-muted">Revenue (All Time)</p>
-            <p className="mt-2 text-2xl font-bold text-primary-light">
+          <div className="bg-surface rounded-xl border border-white/5 p-5">
+            <p className="text-text-muted text-xs tracking-wider uppercase">Revenue (All Time)</p>
+            <p className="text-primary-light mt-2 text-2xl font-bold">
               {formatCurrency(analytics.totals.revenueAllTime)}
             </p>
           </div>
         </FadeIn>
         <FadeIn delay={0.05}>
-          <div className="rounded-xl border border-white/5 bg-surface p-5">
-            <p className="text-xs uppercase tracking-wider text-text-muted">Revenue (30 Days)</p>
-            <p className="mt-2 text-2xl font-bold text-text">
+          <div className="bg-surface rounded-xl border border-white/5 p-5">
+            <p className="text-text-muted text-xs tracking-wider uppercase">Revenue (30 Days)</p>
+            <p className="text-text mt-2 text-2xl font-bold">
               {formatCurrency(analytics.totals.revenue30Days)}
             </p>
-            <p className={`mt-1 text-xs ${trendClass}`}>{formatTrend(analytics.totals.revenueTrendPct)}</p>
+            <p className={`mt-1 text-xs ${trendClass}`}>
+              {formatTrend(analytics.totals.revenueTrendPct)}
+            </p>
           </div>
         </FadeIn>
         <FadeIn delay={0.1}>
-          <div className="rounded-xl border border-white/5 bg-surface p-5">
-            <p className="text-xs uppercase tracking-wider text-text-muted">Orders</p>
-            <p className="mt-2 text-2xl font-bold text-text">{analytics.totals.totalOrders}</p>
-            <p className="mt-1 text-xs text-text-dark">
+          <div className="bg-surface rounded-xl border border-white/5 p-5">
+            <p className="text-text-muted text-xs tracking-wider uppercase">Orders</p>
+            <p className="text-text mt-2 text-2xl font-bold">{analytics.totals.totalOrders}</p>
+            <p className="text-text-dark mt-1 text-xs">
               {analytics.totals.ordersLast30Days} in last 30 days
             </p>
           </div>
         </FadeIn>
         <FadeIn delay={0.15}>
-          <div className="rounded-xl border border-white/5 bg-surface p-5">
-            <p className="text-xs uppercase tracking-wider text-text-muted">Customers</p>
-            <p className="mt-2 text-2xl font-bold text-text">{analytics.totals.totalUsers}</p>
-            <p className="mt-1 text-xs text-text-dark">
+          <div className="bg-surface rounded-xl border border-white/5 p-5">
+            <p className="text-text-muted text-xs tracking-wider uppercase">Customers</p>
+            <p className="text-text mt-2 text-2xl font-bold">{analytics.totals.totalUsers}</p>
+            <p className="text-text-dark mt-1 text-xs">
               {analytics.totals.usersThisMonth} new this month
             </p>
           </div>
@@ -177,9 +179,9 @@ export function AnalyticsDashboard() {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <FadeIn className="xl:col-span-2">
-          <div className="rounded-xl border border-white/5 bg-surface p-6">
-            <h2 className="mb-1 text-lg font-semibold text-text">Revenue Trend (Last 30 Days)</h2>
-            <p className="mb-6 text-sm text-text-muted">Daily paid revenue and order count.</p>
+          <div className="bg-surface rounded-xl border border-white/5 p-6">
+            <h2 className="text-text mb-1 text-lg font-semibold">Revenue Trend (Last 30 Days)</h2>
+            <p className="text-text-muted mb-6 text-sm">Daily paid revenue and order count.</p>
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={revenueChartData}>
@@ -215,9 +217,9 @@ export function AnalyticsDashboard() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <div className="rounded-xl border border-white/5 bg-surface p-6">
-            <h2 className="mb-1 text-lg font-semibold text-text">Order Status</h2>
-            <p className="mb-6 text-sm text-text-muted">Current distribution by status.</p>
+          <div className="bg-surface rounded-xl border border-white/5 p-6">
+            <h2 className="text-text mb-1 text-lg font-semibold">Order Status</h2>
+            <p className="text-text-muted mb-6 text-sm">Current distribution by status.</p>
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -243,7 +245,7 @@ export function AnalyticsDashboard() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <ul className="mt-3 space-y-1 text-xs text-text-muted">
+            <ul className="text-text-muted mt-3 space-y-1 text-xs">
               {analytics.orderStatus.map((status) => (
                 <li key={status.status} className="flex items-center justify-between">
                   <span className="inline-flex items-center gap-2">
@@ -262,9 +264,9 @@ export function AnalyticsDashboard() {
       </div>
 
       <FadeIn delay={0.15}>
-        <div className="rounded-xl border border-white/5 bg-surface p-6">
-          <h2 className="mb-1 text-lg font-semibold text-text">Top Products</h2>
-          <p className="mb-6 text-sm text-text-muted">Top 10 products by units sold.</p>
+        <div className="bg-surface rounded-xl border border-white/5 p-6">
+          <h2 className="text-text mb-1 text-lg font-semibold">Top Products</h2>
+          <p className="text-text-muted mb-6 text-sm">Top 10 products by units sold.</p>
 
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -288,7 +290,7 @@ export function AnalyticsDashboard() {
           <div className="mt-6 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-text-muted">
+                <tr className="text-text-muted border-b border-white/10 text-xs tracking-wider uppercase">
                   <th className="pb-2">Product</th>
                   <th className="pb-2">Units</th>
                   <th className="pb-2">Orders</th>
@@ -298,10 +300,10 @@ export function AnalyticsDashboard() {
               <tbody className="divide-y divide-white/5">
                 {analytics.topProducts.map((product) => (
                   <tr key={product.productId}>
-                    <td className="py-2 text-text">{product.name}</td>
-                    <td className="py-2 text-text-muted">{product.quantity}</td>
-                    <td className="py-2 text-text-muted">{product.orderCount}</td>
-                    <td className="py-2 text-text">{formatCurrency(product.revenue)}</td>
+                    <td className="text-text py-2">{product.name}</td>
+                    <td className="text-text-muted py-2">{product.quantity}</td>
+                    <td className="text-text-muted py-2">{product.orderCount}</td>
+                    <td className="text-text py-2">{formatCurrency(product.revenue)}</td>
                   </tr>
                 ))}
               </tbody>

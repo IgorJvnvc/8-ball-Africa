@@ -60,38 +60,38 @@ export default function AdminProductsPage() {
       <FadeIn>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-text">Products</h1>
-            <p className="mt-2 text-text-muted">Manage your product catalog</p>
+            <h1 className="text-text text-3xl font-bold">Products</h1>
+            <p className="text-text-muted mt-2">Manage your product catalog</p>
           </div>
           <Link
             href="/admin/products/new"
-            className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+            className="bg-primary hover:bg-primary-light rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors"
           >
             + Add Product
           </Link>
         </div>
       </FadeIn>
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-white/5 bg-surface">
+      <div className="bg-surface mt-6 overflow-hidden rounded-xl border border-white/5">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5">
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Product
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Price
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Stock
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-right text-xs font-semibold tracking-wider uppercase">
                 Actions
               </th>
             </tr>
@@ -99,7 +99,7 @@ export default function AdminProductsPage() {
           <tbody className="divide-y divide-white/5">
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-text-muted">
+                <td colSpan={6} className="text-text-muted px-6 py-8 text-center">
                   Loading...
                 </td>
               </tr>
@@ -113,7 +113,7 @@ export default function AdminProductsPage() {
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg bg-surface-light">
+                      <div className="bg-surface-light h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg">
                         {product.images[0] && (
                           <Image
                             src={product.images[0].url}
@@ -125,13 +125,13 @@ export default function AdminProductsPage() {
                         )}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-text">{product.name}</p>
-                        <p className="text-xs text-text-muted">{product.brand}</p>
+                        <p className="text-text text-sm font-medium">{product.name}</p>
+                        <p className="text-text-muted text-xs">{product.brand}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-text-muted">{product.category.name}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-text">
+                  <td className="text-text-muted px-6 py-4 text-sm">{product.category.name}</td>
+                  <td className="text-text px-6 py-4 text-sm font-medium">
                     ${product.price.toFixed(2)}
                   </td>
                   <td className="px-6 py-4">
@@ -157,13 +157,13 @@ export default function AdminProductsPage() {
                     <div className="flex items-center justify-end gap-3">
                       <Link
                         href={`/admin/products/${product.id}/edit`}
-                        className="text-xs text-primary-light hover:underline"
+                        className="text-primary-light text-xs hover:underline"
                       >
                         Edit
                       </Link>
                       <button
                         onClick={() => deleteProduct(product.id)}
-                        className="text-xs text-danger hover:underline"
+                        className="text-danger text-xs hover:underline"
                       >
                         Delete
                       </button>

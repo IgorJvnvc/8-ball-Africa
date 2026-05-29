@@ -91,7 +91,9 @@ describe('GET /api/users/:id', () => {
     })
 
     const req = createMockRequest()
-    const { status, body } = await parseResponse(await GET_BY_ID(req, { params: mockParams('user-1') }))
+    const { status, body } = await parseResponse(
+      await GET_BY_ID(req, { params: mockParams('user-1') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)
@@ -107,7 +109,9 @@ describe('GET /api/users/:id', () => {
     })
 
     const req = createMockRequest()
-    const { status, body } = await parseResponse(await GET_BY_ID(req, { params: mockParams('user-2') }))
+    const { status, body } = await parseResponse(
+      await GET_BY_ID(req, { params: mockParams('user-2') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)
@@ -136,7 +140,9 @@ describe('GET /api/users/:id', () => {
     prismaMock.user.findUnique.mockResolvedValue(null)
 
     const req = createMockRequest()
-    const { status, body } = await parseResponse(await GET_BY_ID(req, { params: mockParams('fake') }))
+    const { status, body } = await parseResponse(
+      await GET_BY_ID(req, { params: mockParams('fake') }),
+    )
 
     expect(status).toBe(404)
     expect(body.error).toBe('User not found')
@@ -202,7 +208,9 @@ describe('DELETE /api/users/:id', () => {
     prismaMock.user.delete.mockResolvedValue(mockUser({ id: 'user-2' }))
 
     const req = createMockRequest({ method: 'DELETE' })
-    const { status, body } = await parseResponse(await DELETE(req, { params: mockParams('user-2') }))
+    const { status, body } = await parseResponse(
+      await DELETE(req, { params: mockParams('user-2') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)
@@ -212,7 +220,9 @@ describe('DELETE /api/users/:id', () => {
     mockAuth(adminSession)
 
     const req = createMockRequest({ method: 'DELETE' })
-    const { status, body } = await parseResponse(await DELETE(req, { params: mockParams('admin-1') }))
+    const { status, body } = await parseResponse(
+      await DELETE(req, { params: mockParams('admin-1') }),
+    )
 
     expect(status).toBe(400)
     expect(body.error).toContain('Cannot delete your own account')

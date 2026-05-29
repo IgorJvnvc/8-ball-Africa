@@ -24,9 +24,7 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(parsePositiveInt(searchParams.get('limit'), 20), 100)
     const roleParam = searchParams.get('role')
     const role =
-      roleParam && Object.values(Role).includes(roleParam as Role)
-        ? (roleParam as Role)
-        : null
+      roleParam && Object.values(Role).includes(roleParam as Role) ? (roleParam as Role) : null
     const q = searchParams.get('q')
 
     const where: Prisma.UserWhereInput = {}

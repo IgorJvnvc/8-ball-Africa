@@ -132,9 +132,7 @@ describe('POST /api/orders', () => {
 
   it('clears cart after order creation', async () => {
     mockAuth(customerSession)
-    prismaMock.cartItem.findMany.mockResolvedValue([
-      { ...mockCartItem(), product: mockProduct() },
-    ])
+    prismaMock.cartItem.findMany.mockResolvedValue([{ ...mockCartItem(), product: mockProduct() }])
     prismaMock.order.create.mockResolvedValue(mockOrder())
     prismaMock.cartItem.deleteMany.mockResolvedValue({ count: 1 })
 

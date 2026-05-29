@@ -58,8 +58,8 @@ export default function AdminUsersPage() {
       <FadeIn>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-text">Users</h1>
-            <p className="mt-2 text-text-muted">Manage customer and admin accounts</p>
+            <h1 className="text-text text-3xl font-bold">Users</h1>
+            <p className="text-text-muted mt-2">Manage customer and admin accounts</p>
           </div>
         </div>
       </FadeIn>
@@ -71,28 +71,28 @@ export default function AdminUsersPage() {
           placeholder="Search users by name or email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md rounded-lg border border-white/10 bg-surface px-4 py-2.5 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none"
+          className="bg-surface text-text placeholder:text-text-dark focus:border-primary w-full max-w-md rounded-lg border border-white/10 px-4 py-2.5 text-sm focus:outline-none"
         />
       </div>
 
       {/* Table */}
-      <div className="mt-6 overflow-hidden rounded-xl border border-white/5 bg-surface">
+      <div className="bg-surface mt-6 overflow-hidden rounded-xl border border-white/5">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5">
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 User
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Role
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Orders
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Joined
               </th>
-              <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-right text-xs font-semibold tracking-wider uppercase">
                 Actions
               </th>
             </tr>
@@ -100,13 +100,13 @@ export default function AdminUsersPage() {
           <tbody className="divide-y divide-white/5">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-text-muted">
+                <td colSpan={5} className="text-text-muted px-6 py-8 text-center">
                   Loading...
                 </td>
               </tr>
             ) : users.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-text-muted">
+                <td colSpan={5} className="text-text-muted px-6 py-8 text-center">
                   No users found
                 </td>
               </tr>
@@ -120,28 +120,28 @@ export default function AdminUsersPage() {
                 >
                   <td className="px-6 py-4">
                     <div>
-                      <p className="text-sm font-medium text-text">{user.name || 'No name'}</p>
-                      <p className="text-xs text-text-muted">{user.email}</p>
+                      <p className="text-text text-sm font-medium">{user.name || 'No name'}</p>
+                      <p className="text-text-muted text-xs">{user.email}</p>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <select
                       value={user.role}
                       onChange={(e) => updateRole(user.id, e.target.value)}
-                      className="rounded-md border border-white/10 bg-background px-2 py-1 text-xs text-text"
+                      className="bg-background text-text rounded-md border border-white/10 px-2 py-1 text-xs"
                     >
                       <option value="CUSTOMER">Customer</option>
                       <option value="ADMIN">Admin</option>
                     </select>
                   </td>
-                  <td className="px-6 py-4 text-sm text-text-muted">{user._count.orders}</td>
-                  <td className="px-6 py-4 text-sm text-text-muted">
+                  <td className="text-text-muted px-6 py-4 text-sm">{user._count.orders}</td>
+                  <td className="text-text-muted px-6 py-4 text-sm">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => deleteUser(user.id)}
-                      className="text-xs text-danger hover:underline"
+                      className="text-danger text-xs hover:underline"
                     >
                       Delete
                     </button>

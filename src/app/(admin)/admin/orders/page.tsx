@@ -56,27 +56,27 @@ export default function AdminOrdersPage() {
   return (
     <div>
       <FadeIn>
-        <h1 className="text-3xl font-bold text-text">Orders</h1>
-        <p className="mt-2 text-text-muted">Manage and track customer orders</p>
+        <h1 className="text-text text-3xl font-bold">Orders</h1>
+        <p className="text-text-muted mt-2">Manage and track customer orders</p>
       </FadeIn>
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-white/5 bg-surface">
+      <div className="bg-surface mt-6 overflow-hidden rounded-xl border border-white/5">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5">
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Order
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Customer
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Total
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <th className="text-text-muted px-6 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                 Date
               </th>
             </tr>
@@ -84,13 +84,13 @@ export default function AdminOrdersPage() {
           <tbody className="divide-y divide-white/5">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-text-muted">
+                <td colSpan={5} className="text-text-muted px-6 py-8 text-center">
                   Loading...
                 </td>
               </tr>
             ) : orders.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-text-muted">
+                <td colSpan={5} className="text-text-muted px-6 py-8 text-center">
                   No orders yet
                 </td>
               </tr>
@@ -103,16 +103,16 @@ export default function AdminOrdersPage() {
                   className="hover:bg-background/50"
                 >
                   <td className="px-6 py-4">
-                    <p className="text-sm font-mono text-text">#{order.id.slice(-8)}</p>
-                    <p className="text-xs text-text-muted">
+                    <p className="text-text font-mono text-sm">#{order.id.slice(-8)}</p>
+                    <p className="text-text-muted text-xs">
                       {order.items.length} item{order.items.length !== 1 ? 's' : ''}
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-sm text-text">{order.user.name || 'N/A'}</p>
-                    <p className="text-xs text-text-muted">{order.user.email}</p>
+                    <p className="text-text text-sm">{order.user.name || 'N/A'}</p>
+                    <p className="text-text-muted text-xs">{order.user.email}</p>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-text">
+                  <td className="text-text px-6 py-4 text-sm font-medium">
                     ${order.total.toFixed(2)}
                   </td>
                   <td className="px-6 py-4">
@@ -129,7 +129,7 @@ export default function AdminOrdersPage() {
                       <option value="CANCELLED">Cancelled</option>
                     </select>
                   </td>
-                  <td className="px-6 py-4 text-sm text-text-muted">
+                  <td className="text-text-muted px-6 py-4 text-sm">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                 </motion.tr>

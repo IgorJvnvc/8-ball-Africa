@@ -54,9 +54,7 @@ vi.mock('@/lib/auth', () => ({
 vi.mock('bcryptjs', () => ({
   default: {
     hash: vi.fn((password: string) => Promise.resolve(`hashed_${password}`)),
-    compare: vi.fn((plain: string, hash: string) =>
-      Promise.resolve(hash === `hashed_${plain}`),
-    ),
+    compare: vi.fn((plain: string, hash: string) => Promise.resolve(hash === `hashed_${plain}`)),
   },
 }))
 

@@ -25,14 +25,14 @@ export function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
+    <header className="bg-background/80 sticky top-0 z-50 border-b border-white/5 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary">
+          <div className="bg-primary flex h-9 w-9 items-center justify-center rounded-full">
             <span className="text-sm font-bold text-white">8</span>
           </div>
-          <span className="text-lg font-bold text-text">
+          <span className="text-text text-lg font-bold">
             8-ball <span className="text-primary-light">Africa</span>
           </span>
         </Link>
@@ -43,7 +43,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-text-muted transition-colors hover:text-text"
+              className="text-text-muted hover:text-text text-sm font-medium transition-colors"
             >
               {link.label}
             </Link>
@@ -53,7 +53,7 @@ export function Header() {
         {/* Right actions */}
         <div className="flex items-center gap-4">
           {/* Search */}
-          <button className="text-text-muted transition-colors hover:text-text">
+          <button className="text-text-muted hover:text-text transition-colors">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -68,7 +68,7 @@ export function Header() {
           <button
             onClick={openCart}
             aria-label="Open cart"
-            className="relative text-text-muted transition-colors hover:text-text"
+            className="text-text-muted hover:text-text relative transition-colors"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -82,7 +82,7 @@ export function Header() {
               <motion.span
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-background"
+                className="bg-accent text-background absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold"
               >
                 {totalItems()}
               </motion.span>
@@ -95,14 +95,14 @@ export function Header() {
               {session.user.role === 'ADMIN' && (
                 <Link
                   href="/admin"
-                  className="text-xs font-medium text-accent transition-colors hover:text-accent-light"
+                  className="text-accent hover:text-accent-light text-xs font-medium transition-colors"
                 >
                   Admin
                 </Link>
               )}
               <button
                 onClick={handleSignOut}
-                className="text-sm text-text-muted transition-colors hover:text-text"
+                className="text-text-muted hover:text-text text-sm transition-colors"
               >
                 Sign out
               </button>
@@ -110,7 +110,7 @@ export function Header() {
           ) : (
             <Link
               href="/login"
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-light"
+              className="bg-primary hover:bg-primary-light rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
             >
               Sign in
             </Link>
@@ -156,7 +156,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block rounded-lg px-3 py-2 text-sm text-text-muted transition-colors hover:bg-surface hover:text-text"
+                className="text-text-muted hover:bg-surface hover:text-text block rounded-lg px-3 py-2 text-sm transition-colors"
               >
                 {link.label}
               </Link>

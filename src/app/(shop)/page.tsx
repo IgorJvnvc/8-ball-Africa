@@ -65,22 +65,22 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <FadeIn>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent-light">
+            <p className="text-accent-light text-xs font-semibold tracking-[0.24em] uppercase">
               About 8-Ball Africa
             </p>
-            <h2 className="mt-4 text-3xl font-bold text-text sm:text-4xl">
+            <h2 className="text-text mt-4 text-3xl font-bold sm:text-4xl">
               Africa&apos;s trusted destination for serious 8-ball players
             </h2>
-            <p className="mt-5 text-text-muted">
+            <p className="text-text-muted mt-5">
               8-Ball Africa is a specialist billiards retailer built for players who care about
               consistency, cue feel, and tournament-ready gear. From first-time buyers to club
               owners and league captains, we help every customer find the right setup.
             </p>
-            <p className="mt-4 text-text-muted">
+            <p className="text-text-muted mt-4">
               We curate professional tables, cues, cloth, and accessories from globally respected
               brands and support delivery across major cities in Southern, East, and West Africa.
             </p>
-            <p className="mt-4 text-text-muted">
+            <p className="text-text-muted mt-4">
               Our Johannesburg team also advises on full venue setups, replacement parts, and
               long-term maintenance so your tables stay true and your game stays sharp.
             </p>
@@ -88,21 +88,24 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/products"
-                className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-primary-light"
+                className="bg-primary hover:bg-primary-light rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105"
               >
                 Explore Catalog
               </Link>
               <Link
                 href="/products?category=pool-tables"
-                className="rounded-xl border border-white/15 px-6 py-3 text-sm font-semibold text-text transition-colors hover:border-primary-light hover:text-primary-light"
+                className="text-text hover:border-primary-light hover:text-primary-light rounded-xl border border-white/15 px-6 py-3 text-sm font-semibold transition-colors"
               >
                 Find a Table
               </Link>
             </div>
           </FadeIn>
 
-          <FadeIn className="relative overflow-hidden rounded-2xl border border-white/10 bg-surface" delay={0.12}>
-            <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
+          <FadeIn
+            className="bg-surface relative overflow-hidden rounded-2xl border border-white/10"
+            delay={0.12}
+          >
+            <div className="from-background/70 absolute inset-0 bg-gradient-to-t to-transparent" />
             <Image
               src="/images/home/snooker-hall-1.jpg"
               alt="8-ball tables prepared for league night in a premium billiards room"
@@ -112,9 +115,9 @@ export default async function HomePage() {
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <p className="text-sm font-semibold text-text">League-Ready Setups</p>
-              <p className="mt-1 text-sm text-text-muted">
+            <div className="absolute right-0 bottom-0 left-0 p-5">
+              <p className="text-text text-sm font-semibold">League-Ready Setups</p>
+              <p className="text-text-muted mt-1 text-sm">
                 Tournament cloth, calibrated rails, and cue performance tuning.
               </p>
             </div>
@@ -122,11 +125,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-white/5 bg-surface/35">
+      <section className="bg-surface/35 border-y border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <FadeIn>
-            <h2 className="text-3xl font-bold text-text">Inside the 8-Ball Scene</h2>
-            <p className="mt-3 max-w-3xl text-text-muted">
+            <h2 className="text-text text-3xl font-bold">Inside the 8-Ball Scene</h2>
+            <p className="text-text-muted mt-3 max-w-3xl">
               A glimpse at the pool halls, club nights, and pro-grade seller spaces that inspire the
               products we stock.
             </p>
@@ -135,7 +138,7 @@ export default async function HomePage() {
           <StaggerChildren className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SCENE_IMAGES.map((image) => (
               <StaggerItem key={image.src}>
-                <div className="group overflow-hidden rounded-2xl border border-white/10 bg-surface-light/40">
+                <div className="group bg-surface-light/40 overflow-hidden rounded-2xl border border-white/10">
                   <Image
                     src={image.src}
                     alt={image.alt}
@@ -154,17 +157,15 @@ export default async function HomePage() {
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <FadeIn>
-          <h2 className="mb-2 text-3xl font-bold text-text">Shop by Category</h2>
-          <p className="mb-10 text-text-muted">
-            Find exactly what you need to elevate your game
-          </p>
+          <h2 className="text-text mb-2 text-3xl font-bold">Shop by Category</h2>
+          <p className="text-text-muted mb-10">Find exactly what you need to elevate your game</p>
         </FadeIn>
         <StaggerChildren className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {categories.map((category) => (
             <StaggerItem key={category.id}>
               <Link
                 href={`/products?category=${category.slug}`}
-                className="group relative flex h-32 items-end overflow-hidden rounded-xl bg-surface p-4 transition-all hover:ring-2 hover:ring-primary-light"
+                className="group bg-surface hover:ring-primary-light relative flex h-32 items-end overflow-hidden rounded-xl p-4 transition-all hover:ring-2"
               >
                 {category.image && (
                   <Image
@@ -175,8 +176,8 @@ export default async function HomePage() {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <span className="relative text-sm font-semibold text-text group-hover:text-primary-light transition-colors">
+                <div className="from-background/80 absolute inset-0 bg-gradient-to-t to-transparent" />
+                <span className="text-text group-hover:text-primary-light relative text-sm font-semibold transition-colors">
                   {category.name}
                 </span>
               </Link>
@@ -185,41 +186,44 @@ export default async function HomePage() {
         </StaggerChildren>
       </section>
 
-      <section className="border-y border-white/5 bg-surface/60">
+      <section className="bg-surface/60 border-y border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <FadeIn className="rounded-2xl border border-white/10 bg-background/70 p-7 sm:p-9">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent-light">
+            <FadeIn className="bg-background/70 rounded-2xl border border-white/10 p-7 sm:p-9">
+              <p className="text-accent-light text-xs font-semibold tracking-[0.24em] uppercase">
                 Visit Our Showroom
               </p>
-              <h2 className="mt-4 text-3xl font-bold text-text">See and test before you buy</h2>
-              <p className="mt-4 text-text-muted">
+              <h2 className="text-text mt-4 text-3xl font-bold">See and test before you buy</h2>
+              <p className="text-text-muted mt-4">
                 Walk in, compare cue weights, inspect cloth textures, and get setup advice from our
                 in-house team.
               </p>
 
               <dl className="mt-7 space-y-4 text-sm">
                 <div>
-                  <dt className="font-semibold text-text">Address</dt>
-                  <dd className="mt-1 text-text-muted">
+                  <dt className="text-text font-semibold">Address</dt>
+                  <dd className="text-text-muted mt-1">
                     127 Commissioner Street, Johannesburg CBD, 2001, South Africa
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-semibold text-text">Contact</dt>
-                  <dd className="mt-1 text-text-muted">+27 11 555 0142</dd>
+                  <dt className="text-text font-semibold">Contact</dt>
+                  <dd className="text-text-muted mt-1">+27 11 555 0142</dd>
                   <dd className="text-text-muted">info@8ballafrica.com</dd>
                 </div>
                 <div>
-                  <dt className="font-semibold text-text">Hours</dt>
-                  <dd className="mt-1 text-text-muted">Mon-Fri: 09:00-18:00</dd>
+                  <dt className="text-text font-semibold">Hours</dt>
+                  <dd className="text-text-muted mt-1">Mon-Fri: 09:00-18:00</dd>
                   <dd className="text-text-muted">Sat: 09:00-15:00</dd>
                   <dd className="text-text-muted">Sun: Closed</dd>
                 </div>
               </dl>
             </FadeIn>
 
-            <FadeIn className="relative overflow-hidden rounded-2xl border border-white/10" delay={0.08}>
+            <FadeIn
+              className="relative overflow-hidden rounded-2xl border border-white/10"
+              delay={0.08}
+            >
               <Image
                 src="/images/home/pool-hall-2.jpg"
                 alt="A billiards seller space with premium 8-ball tables"
@@ -228,10 +232,10 @@ export default async function HomePage() {
                 className="h-[420px] w-full object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+              <div className="from-background/80 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 rounded-xl border border-white/15 bg-black/35 px-4 py-3 text-sm backdrop-blur-sm">
-                <p className="font-semibold text-text">In-store table demos</p>
-                <p className="mt-1 text-text-muted">Try cue balance and table speed in person.</p>
+                <p className="text-text font-semibold">In-store table demos</p>
+                <p className="text-text-muted mt-1">Try cue balance and table speed in person.</p>
               </div>
             </FadeIn>
           </div>
@@ -243,12 +247,12 @@ export default async function HomePage() {
         <FadeIn>
           <div className="mb-10 flex items-end justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-text">Featured Products</h2>
-              <p className="mt-2 text-text-muted">Handpicked by our team of experts</p>
+              <h2 className="text-text text-3xl font-bold">Featured Products</h2>
+              <p className="text-text-muted mt-2">Handpicked by our team of experts</p>
             </div>
             <Link
               href="/products"
-              className="text-sm font-medium text-primary-light hover:underline"
+              className="text-primary-light text-sm font-medium hover:underline"
             >
               View all products &rarr;
             </Link>
@@ -264,19 +268,19 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-y border-white/5 bg-surface">
+      <section className="bg-surface border-y border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
           <FadeIn>
-            <h2 className="text-3xl font-bold text-text sm:text-4xl">
+            <h2 className="text-text text-3xl font-bold sm:text-4xl">
               Ready to upgrade your game?
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-text-muted">
+            <p className="text-text-muted mx-auto mt-4 max-w-2xl text-lg">
               Join thousands of players across Africa who trust 8-ball Africa for their equipment
               needs.
             </p>
             <Link
               href="/products"
-              className="mt-8 inline-block rounded-xl bg-primary px-8 py-4 text-sm font-semibold text-white transition-all hover:bg-primary-light hover:scale-105"
+              className="bg-primary hover:bg-primary-light mt-8 inline-block rounded-xl px-8 py-4 text-sm font-semibold text-white transition-all hover:scale-105"
             >
               Browse the Collection
             </Link>

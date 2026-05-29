@@ -54,11 +54,11 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold text-text">Your cart is empty</h1>
-        <p className="mt-2 text-text-muted">Add some products before checking out</p>
+        <h1 className="text-text text-2xl font-bold">Your cart is empty</h1>
+        <p className="text-text-muted mt-2">Add some products before checking out</p>
         <button
           onClick={() => router.push('/products')}
-          className="mt-6 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white"
+          className="bg-primary mt-6 rounded-lg px-6 py-3 text-sm font-semibold text-white"
         >
           Browse Products
         </button>
@@ -69,87 +69,87 @@ export default function CheckoutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <FadeIn>
-        <h1 className="text-3xl font-bold text-text">Checkout</h1>
+        <h1 className="text-text text-3xl font-bold">Checkout</h1>
       </FadeIn>
 
       <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-5">
         {/* Form */}
-        <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 lg:col-span-3">
           <FadeIn delay={0.1}>
-            <div className="rounded-xl border border-white/5 bg-surface p-6">
-              <h2 className="mb-4 text-lg font-semibold text-text">Shipping Address</h2>
+            <div className="bg-surface rounded-xl border border-white/5 p-6">
+              <h2 className="text-text mb-4 text-lg font-semibold">Shipping Address</h2>
               {error && (
-                <p className="mb-4 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                <p className="border-danger/30 bg-danger/10 text-danger mb-4 rounded-lg border px-3 py-2 text-sm">
                   {error}
                 </p>
               )}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label className="mb-1 block text-sm text-text-muted">Full Name</label>
+                  <label className="text-text-muted mb-1 block text-sm">Full Name</label>
                   <input
                     type="text"
                     required
                     value={address.fullName}
                     onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="mb-1 block text-sm text-text-muted">Street Address</label>
+                  <label className="text-text-muted mb-1 block text-sm">Street Address</label>
                   <input
                     type="text"
                     required
                     value={address.street}
                     onChange={(e) => setAddress({ ...address, street: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm text-text-muted">City</label>
+                  <label className="text-text-muted mb-1 block text-sm">City</label>
                   <input
                     type="text"
                     required
                     value={address.city}
                     onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm text-text-muted">State / Province</label>
+                  <label className="text-text-muted mb-1 block text-sm">State / Province</label>
                   <input
                     type="text"
                     value={address.state}
                     onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm text-text-muted">Postal Code</label>
+                  <label className="text-text-muted mb-1 block text-sm">Postal Code</label>
                   <input
                     type="text"
                     required
                     value={address.postalCode}
                     onChange={(e) => setAddress({ ...address, postalCode: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm text-text-muted">Country</label>
+                  <label className="text-text-muted mb-1 block text-sm">Country</label>
                   <input
                     type="text"
                     required
                     value={address.country}
                     onChange={(e) => setAddress({ ...address, country: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="mb-1 block text-sm text-text-muted">Phone (optional)</label>
+                  <label className="text-text-muted mb-1 block text-sm">Phone (optional)</label>
                   <input
                     type="tel"
                     value={address.phone}
                     onChange={(e) => setAddress({ ...address, phone: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-background px-4 py-3 text-sm text-text focus:border-primary focus:outline-none"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-4 py-3 text-sm focus:outline-none"
                   />
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-primary py-4 text-base font-semibold text-white transition-colors hover:bg-primary-light disabled:opacity-50"
+            className="bg-primary hover:bg-primary-light w-full rounded-xl py-4 text-base font-semibold text-white transition-colors disabled:opacity-50"
           >
             {loading ? 'Processing...' : `Pay $${total.toFixed(2)}`}
           </motion.button>
@@ -168,19 +168,25 @@ export default function CheckoutPage() {
 
         {/* Order Summary */}
         <FadeIn delay={0.2} className="lg:col-span-2">
-          <div className="sticky top-24 rounded-xl border border-white/5 bg-surface p-6">
-            <h2 className="mb-4 text-lg font-semibold text-text">Order Summary</h2>
+          <div className="bg-surface sticky top-24 rounded-xl border border-white/5 p-6">
+            <h2 className="text-text mb-4 text-lg font-semibold">Order Summary</h2>
             <ul className="divide-y divide-white/5">
               {items.map((item) => (
                 <li key={item.productId} className="flex gap-3 py-3">
-                  <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-surface-light">
-                    <Image src={item.image} alt={item.name} fill className="object-cover" sizes="56px" />
+                  <div className="bg-surface-light relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                      sizes="56px"
+                    />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-text">{item.name}</p>
-                    <p className="text-xs text-text-muted">Qty: {item.quantity}</p>
+                    <p className="text-text text-sm font-medium">{item.name}</p>
+                    <p className="text-text-muted text-xs">Qty: {item.quantity}</p>
                   </div>
-                  <p className="text-sm font-medium text-text">
+                  <p className="text-text text-sm font-medium">
                     ${(item.price * item.quantity).toFixed(2)}
                   </p>
                 </li>

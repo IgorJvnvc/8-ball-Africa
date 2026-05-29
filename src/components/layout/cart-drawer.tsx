@@ -27,15 +27,15 @@ export function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-surface shadow-2xl"
+            className="bg-surface fixed top-0 right-0 z-50 flex h-full w-full max-w-md flex-col shadow-2xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
-              <h2 className="text-lg font-semibold text-text">Your Cart</h2>
+              <h2 className="text-text text-lg font-semibold">Your Cart</h2>
               <button
                 onClick={closeCart}
                 aria-label="Close cart"
-                className="text-text-muted transition-colors hover:text-text"
+                className="text-text-muted hover:text-text transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -53,7 +53,7 @@ export function CartDrawer() {
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <svg
-                    className="mb-4 h-16 w-16 text-text-dark"
+                    className="text-text-dark mb-4 h-16 w-16"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export function CartDrawer() {
                   <p className="text-text-muted">Your cart is empty</p>
                   <button
                     onClick={closeCart}
-                    className="mt-4 text-sm text-primary-light hover:underline"
+                    className="text-primary-light mt-4 text-sm hover:underline"
                   >
                     Continue shopping
                   </button>
@@ -92,14 +92,14 @@ export function CartDrawer() {
               <div className="border-t border-white/5 px-6 py-4">
                 <div className="mb-4 flex items-center justify-between">
                   <span className="text-text-muted">Subtotal</span>
-                  <span className="text-lg font-semibold text-text">
+                  <span className="text-text text-lg font-semibold">
                     ${totalPrice().toFixed(2)}
                   </span>
                 </div>
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="block w-full rounded-lg bg-primary py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+                  className="bg-primary hover:bg-primary-light block w-full rounded-lg py-3 text-center text-sm font-semibold text-white transition-colors"
                 >
                   Proceed to Checkout
                 </Link>
@@ -125,15 +125,19 @@ function CartItemRow({
     <motion.li
       layout
       exit={{ opacity: 0, x: 50 }}
-      className="flex gap-4 rounded-lg bg-background p-3"
+      className="bg-background flex gap-4 rounded-lg p-3"
     >
-      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-surface-light">
+      <div className="bg-surface-light relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
         <Image src={item.image} alt={item.name} fill className="object-cover" sizes="64px" />
       </div>
       <div className="flex flex-1 flex-col justify-between">
         <div className="flex justify-between">
-          <p className="text-sm font-medium text-text">{item.name}</p>
-          <button onClick={onRemove} aria-label={`Remove ${item.name}`} className="text-text-dark hover:text-danger">
+          <p className="text-text text-sm font-medium">{item.name}</p>
+          <button
+            onClick={onRemove}
+            aria-label={`Remove ${item.name}`}
+            className="text-text-dark hover:text-danger"
+          >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -149,21 +153,21 @@ function CartItemRow({
             <button
               onClick={() => onUpdateQuantity(item.quantity - 1)}
               aria-label={`Decrease quantity of ${item.name}`}
-              className="flex h-6 w-6 items-center justify-center rounded bg-surface-light text-text-muted hover:text-text"
+              className="bg-surface-light text-text-muted hover:text-text flex h-6 w-6 items-center justify-center rounded"
             >
               -
             </button>
-            <span className="text-sm text-text">{item.quantity}</span>
+            <span className="text-text text-sm">{item.quantity}</span>
             <button
               onClick={() => onUpdateQuantity(item.quantity + 1)}
               aria-label={`Increase quantity of ${item.name}`}
               disabled={item.quantity >= item.stock}
-              className="flex h-6 w-6 items-center justify-center rounded bg-surface-light text-text-muted hover:text-text disabled:opacity-50"
+              className="bg-surface-light text-text-muted hover:text-text flex h-6 w-6 items-center justify-center rounded disabled:opacity-50"
             >
               +
             </button>
           </div>
-          <p className="text-sm font-medium text-primary-light">
+          <p className="text-primary-light text-sm font-medium">
             ${(item.price * item.quantity).toFixed(2)}
           </p>
         </div>

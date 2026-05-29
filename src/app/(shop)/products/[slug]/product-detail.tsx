@@ -76,9 +76,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
       priceCurrency: 'USD',
       price: product.price.toFixed(2),
       availability:
-        product.stock > 0
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
+        product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       url: `/products/${product.slug}`,
       itemCondition: 'https://schema.org/NewCondition',
     },
@@ -106,10 +104,14 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
       />
 
       {/* Breadcrumb */}
-      <nav className="mb-8 flex items-center gap-2 text-sm text-text-muted">
-        <Link href="/" className="hover:text-text">Home</Link>
+      <nav className="text-text-muted mb-8 flex items-center gap-2 text-sm">
+        <Link href="/" className="hover:text-text">
+          Home
+        </Link>
         <span>/</span>
-        <Link href="/products" className="hover:text-text">Products</Link>
+        <Link href="/products" className="hover:text-text">
+          Products
+        </Link>
         <span>/</span>
         <Link href={`/products?category=${product.category.slug}`} className="hover:text-text">
           {product.category.name}
@@ -126,7 +128,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="relative aspect-square overflow-hidden rounded-2xl bg-surface-light"
+              className="bg-surface-light relative aspect-square overflow-hidden rounded-2xl"
             >
               {product.images[selectedImage] ? (
                 <Image
@@ -138,7 +140,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                   priority
                 />
               ) : (
-                <div className="flex h-full items-center justify-center text-text-dark">
+                <div className="text-text-dark flex h-full items-center justify-center">
                   <span className="text-6xl font-bold">8</span>
                 </div>
               )}
@@ -175,8 +177,8 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
         <FadeIn direction="right">
           <div className="space-y-6">
             <div>
-              <p className="text-sm font-medium text-accent">{product.brand}</p>
-              <h1 className="mt-2 text-3xl font-bold text-text">{product.name}</h1>
+              <p className="text-accent text-sm font-medium">{product.brand}</p>
+              <h1 className="text-text mt-2 text-3xl font-bold">{product.name}</h1>
             </div>
 
             {/* Rating */}
@@ -194,7 +196,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm text-text-muted">
+                <span className="text-text-muted text-sm">
                   ({product.reviews.length} review{product.reviews.length !== 1 ? 's' : ''})
                 </span>
               </div>
@@ -202,16 +204,16 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
 
             {/* Price */}
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-primary-light">
+              <span className="text-primary-light text-3xl font-bold">
                 ${product.price.toFixed(2)}
               </span>
               {product.comparePrice && (
-                <span className="text-lg text-text-dark line-through">
+                <span className="text-text-dark text-lg line-through">
                   ${product.comparePrice.toFixed(2)}
                 </span>
               )}
               {product.comparePrice && (
-                <span className="rounded-full bg-danger/10 px-2 py-0.5 text-xs font-semibold text-danger">
+                <span className="bg-danger/10 text-danger rounded-full px-2 py-0.5 text-xs font-semibold">
                   Save ${(product.comparePrice - product.price).toFixed(2)}
                 </span>
               )}
@@ -238,7 +240,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
               whileTap={{ scale: 0.98 }}
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="w-full rounded-xl bg-primary py-4 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-primary-light disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+              className="bg-primary shadow-primary/25 hover:bg-primary-light w-full rounded-xl py-4 text-base font-semibold text-white shadow-lg transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
             >
               {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
             </motion.button>
@@ -250,18 +252,18 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
       {product.reviews.length > 0 && (
         <section className="mt-20">
           <FadeIn>
-            <h2 className="text-2xl font-bold text-text">Customer Reviews</h2>
+            <h2 className="text-text text-2xl font-bold">Customer Reviews</h2>
           </FadeIn>
           <StaggerChildren className="mt-8 space-y-4">
             {product.reviews.map((review) => (
               <StaggerItem key={review.id}>
-                <div className="rounded-xl border border-white/5 bg-surface p-6">
+                <div className="bg-surface rounded-xl border border-white/5 p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary-light">
+                      <div className="bg-primary/20 text-primary-light flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold">
                         {review.user.name?.[0] || '?'}
                       </div>
-                      <span className="text-sm font-medium text-text">
+                      <span className="text-text text-sm font-medium">
                         {review.user.name || 'Anonymous'}
                       </span>
                     </div>
@@ -279,7 +281,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                     </div>
                   </div>
                   {review.comment && (
-                    <p className="mt-3 text-sm text-text-muted">{review.comment}</p>
+                    <p className="text-text-muted mt-3 text-sm">{review.comment}</p>
                   )}
                 </div>
               </StaggerItem>
@@ -292,7 +294,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
       {relatedProducts.length > 0 && (
         <section className="mt-20">
           <FadeIn>
-            <h2 className="text-2xl font-bold text-text">You Might Also Like</h2>
+            <h2 className="text-text text-2xl font-bold">You Might Also Like</h2>
           </FadeIn>
           <StaggerChildren className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {relatedProducts.map((p) => (

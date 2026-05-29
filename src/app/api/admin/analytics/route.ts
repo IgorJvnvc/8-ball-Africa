@@ -140,7 +140,7 @@ export async function GET() {
 
     const ordersLast30Days = recentOrders.length
     const paidOrdersLast30Days = recentOrders.filter((order) =>
-      REVENUE_STATUSES.includes(order.status)
+      REVENUE_STATUSES.includes(order.status),
     ).length
 
     return NextResponse.json({

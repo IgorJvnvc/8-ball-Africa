@@ -104,7 +104,9 @@ describe('DELETE /api/products/:id', () => {
     prismaMock.product.delete.mockResolvedValue(mockProduct())
 
     const req = createMockRequest({ method: 'DELETE' })
-    const { status, body } = await parseResponse(await DELETE(req, { params: mockParams('prod-1') }))
+    const { status, body } = await parseResponse(
+      await DELETE(req, { params: mockParams('prod-1') }),
+    )
 
     expect(status).toBe(200)
     expect(body.success).toBe(true)

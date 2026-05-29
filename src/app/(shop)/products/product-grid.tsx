@@ -53,11 +53,21 @@ export function ProductGrid({ products, currentPage, totalPages }: ProductGridPr
         animate={{ opacity: 1 }}
         className="flex flex-col items-center justify-center py-20 text-center"
       >
-        <svg className="mb-4 h-16 w-16 text-text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <svg
+          className="text-text-dark mb-4 h-16 w-16"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
         </svg>
-        <p className="text-lg font-medium text-text-muted">No products found</p>
-        <p className="mt-1 text-sm text-text-dark">Try adjusting your filters</p>
+        <p className="text-text-muted text-lg font-medium">No products found</p>
+        <p className="text-text-dark mt-1 text-sm">Try adjusting your filters</p>
       </motion.div>
     )
   }
@@ -77,14 +87,14 @@ export function ProductGrid({ products, currentPage, totalPages }: ProductGridPr
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-12">
-          <p className="mb-3 text-center text-xs text-text-dark">
+          <p className="text-text-dark mb-3 text-center text-xs">
             Page {currentPage} of {totalPages}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {currentPage > 1 && (
               <Link
                 href={getPageUrl(currentPage - 1)}
-                className="rounded-lg border border-white/10 px-4 py-2 text-sm text-text-muted transition-colors hover:border-primary hover:text-text"
+                className="text-text-muted hover:border-primary hover:text-text rounded-lg border border-white/10 px-4 py-2 text-sm transition-colors"
               >
                 Previous
               </Link>
@@ -95,7 +105,7 @@ export function ProductGrid({ products, currentPage, totalPages }: ProductGridPr
 
               return (
                 <div key={page} className="contents">
-                  {showGap && <span className="px-1 text-sm text-text-dark">...</span>}
+                  {showGap && <span className="text-text-dark px-1 text-sm">...</span>}
                   <Link
                     href={getPageUrl(page)}
                     className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
@@ -112,7 +122,7 @@ export function ProductGrid({ products, currentPage, totalPages }: ProductGridPr
             {currentPage < totalPages && (
               <Link
                 href={getPageUrl(currentPage + 1)}
-                className="rounded-lg border border-white/10 px-4 py-2 text-sm text-text-muted transition-colors hover:border-primary hover:text-text"
+                className="text-text-muted hover:border-primary hover:text-text rounded-lg border border-white/10 px-4 py-2 text-sm transition-colors"
               >
                 Next
               </Link>

@@ -41,10 +41,10 @@ export function ProductCard({ product }: ProductCardProps) {
       <motion.article
         whileHover={{ y: -4 }}
         transition={{ duration: 0.2 }}
-        className="group relative overflow-hidden rounded-xl border border-white/5 bg-surface transition-all hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
+        className="group bg-surface hover:border-primary/30 hover:shadow-primary/5 relative overflow-hidden rounded-xl border border-white/5 transition-all hover:shadow-xl"
       >
         {/* Image */}
-        <div className="relative aspect-square overflow-hidden bg-surface-light">
+        <div className="bg-surface-light relative aspect-square overflow-hidden">
           {image ? (
             <Image
               src={image.url}
@@ -54,7 +54,7 @@ export function ProductCard({ product }: ProductCardProps) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-text-dark">
+            <div className="text-text-dark flex h-full items-center justify-center">
               <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -68,7 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Sale badge */}
           {product.comparePrice && (
-            <span className="absolute left-3 top-3 rounded-full bg-danger px-2 py-0.5 text-xs font-bold text-white">
+            <span className="bg-danger absolute top-3 left-3 rounded-full px-2 py-0.5 text-xs font-bold text-white">
               Sale
             </span>
           )}
@@ -78,7 +78,7 @@ export function ProductCard({ product }: ProductCardProps) {
             initial={{ opacity: 0, y: 10 }}
             whileHover={{ scale: 1.05 }}
             onClick={handleAddToCart}
-            className="absolute bottom-3 right-3 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+            className="bg-primary absolute right-3 bottom-3 rounded-lg px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
           >
             Add to Cart
           </motion.button>
@@ -86,20 +86,22 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Info */}
         <div className="p-4">
-          <p className="text-xs font-medium text-text-dark">{product.brand}</p>
-          <h3 className="mt-1 text-sm font-semibold text-text line-clamp-2">{product.name}</h3>
+          <p className="text-text-dark text-xs font-medium">{product.brand}</p>
+          <h3 className="text-text mt-1 line-clamp-2 text-sm font-semibold">{product.name}</h3>
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-lg font-bold text-primary-light">${product.price.toFixed(2)}</span>
+            <span className="text-primary-light text-lg font-bold">
+              ${product.price.toFixed(2)}
+            </span>
             {product.comparePrice && (
-              <span className="text-sm text-text-dark line-through">
+              <span className="text-text-dark text-sm line-through">
                 ${product.comparePrice.toFixed(2)}
               </span>
             )}
           </div>
           {product.stock <= 5 && product.stock > 0 && (
-            <p className="mt-1 text-xs text-warning">Only {product.stock} left</p>
+            <p className="text-warning mt-1 text-xs">Only {product.stock} left</p>
           )}
-          {product.stock === 0 && <p className="mt-1 text-xs text-danger">Out of stock</p>}
+          {product.stock === 0 && <p className="text-danger mt-1 text-xs">Out of stock</p>}
         </div>
       </motion.article>
     </Link>

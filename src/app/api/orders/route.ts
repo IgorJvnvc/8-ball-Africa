@@ -71,7 +71,14 @@ export async function POST(req: NextRequest) {
 
     let resolvedAddressId: string | null = addressId || null
 
-    if (!resolvedAddressId && address?.fullName && address?.street && address?.city && address?.postalCode && address?.country) {
+    if (
+      !resolvedAddressId &&
+      address?.fullName &&
+      address?.street &&
+      address?.city &&
+      address?.postalCode &&
+      address?.country
+    ) {
       const createdAddress = await prisma.address.create({
         data: {
           userId: session.user.id,

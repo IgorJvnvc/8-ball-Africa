@@ -73,7 +73,8 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
   const canonicalParams = new URLSearchParams()
   if (params.category) canonicalParams.set('category', params.category)
   if (searchQuery) canonicalParams.set('q', searchQuery)
-  const canonical = canonicalParams.size > 0 ? `/products?${canonicalParams.toString()}` : '/products'
+  const canonical =
+    canonicalParams.size > 0 ? `/products?${canonicalParams.toString()}` : '/products'
 
   return {
     title,
@@ -185,16 +186,16 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <FadeIn>
-        <h1 className="text-3xl font-bold text-text">
+        <h1 className="text-text text-3xl font-bold">
           {params.category
             ? categories.find((c) => c.slug === params.category)?.name || 'Products'
             : 'All Products'}
         </h1>
-        <p className="mt-2 text-text-muted">
+        <p className="text-text-muted mt-2">
           {total} product{total !== 1 ? 's' : ''} found
         </p>
         {searchQuery && (
-          <p className="mt-1 text-sm text-text-dark">
+          <p className="text-text-dark mt-1 text-sm">
             Search: <span className="text-text">{searchQuery}</span>
           </p>
         )}
@@ -202,17 +203,17 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
       <div className="mt-8 flex gap-8">
         {/* Filters */}
-          <FilterSidebar
-            categories={categories}
-            brands={brands.map((b) => b.brand)}
-            currentFilters={{
-              ...params,
-              q: searchQuery || undefined,
-              sort: sortField,
-              order: sortOrder,
-              limit: String(limit),
-            }}
-          />
+        <FilterSidebar
+          categories={categories}
+          brands={brands.map((b) => b.brand)}
+          currentFilters={{
+            ...params,
+            q: searchQuery || undefined,
+            sort: sortField,
+            order: sortOrder,
+            limit: String(limit),
+          }}
+        />
 
         {/* Products Grid */}
         <div className="flex-1">

@@ -84,16 +84,30 @@ export function OrderConfirmationEmail({
 
           <Section style={totals}>
             <Row>
-              <Column><Text style={label}>Subtotal</Text></Column>
-              <Column style={{ textAlign: 'right' as const }}><Text style={value}>R {subtotal.toFixed(2)}</Text></Column>
+              <Column>
+                <Text style={label}>Subtotal</Text>
+              </Column>
+              <Column style={{ textAlign: 'right' as const }}>
+                <Text style={value}>R {subtotal.toFixed(2)}</Text>
+              </Column>
             </Row>
             <Row>
-              <Column><Text style={label}>Shipping</Text></Column>
-              <Column style={{ textAlign: 'right' as const }}><Text style={value}>R {shippingCost.toFixed(2)}</Text></Column>
+              <Column>
+                <Text style={label}>Shipping</Text>
+              </Column>
+              <Column style={{ textAlign: 'right' as const }}>
+                <Text style={value}>R {shippingCost.toFixed(2)}</Text>
+              </Column>
             </Row>
             <Row>
-              <Column><Text style={{ ...label, fontWeight: 'bold' }}>Total</Text></Column>
-              <Column style={{ textAlign: 'right' as const }}><Text style={{ ...value, fontWeight: 'bold', fontSize: '18px' }}>R {total.toFixed(2)}</Text></Column>
+              <Column>
+                <Text style={{ ...label, fontWeight: 'bold' }}>Total</Text>
+              </Column>
+              <Column style={{ textAlign: 'right' as const }}>
+                <Text style={{ ...value, fontWeight: 'bold', fontSize: '18px' }}>
+                  R {total.toFixed(2)}
+                </Text>
+              </Column>
             </Row>
           </Section>
 

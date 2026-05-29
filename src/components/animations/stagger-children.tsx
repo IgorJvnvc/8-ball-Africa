@@ -9,11 +9,7 @@ interface StaggerChildrenProps {
   className?: string
 }
 
-export function StaggerChildren({
-  children,
-  staggerDelay = 0.1,
-  className,
-}: StaggerChildrenProps) {
+export function StaggerChildren({ children, staggerDelay = 0.1, className }: StaggerChildrenProps) {
   return (
     <motion.div
       initial="hidden"

@@ -23,7 +23,16 @@ interface SendInvoiceParams {
  * Generates a PDF invoice and sends an order confirmation email with the PDF attached.
  */
 export async function sendOrderInvoice(params: SendInvoiceParams) {
-  const { customerName, customerEmail, orderNumber, orderDate, items, subtotal, shippingCost, total } = params
+  const {
+    customerName,
+    customerEmail,
+    orderNumber,
+    orderDate,
+    items,
+    subtotal,
+    shippingCost,
+    total,
+  } = params
 
   // Generate PDF invoice
   const pdfBuffer = await generateInvoicePDF({

@@ -66,46 +66,49 @@ export default function AdminCategoriesPage() {
     return categories.filter((category) => category.id !== editingCategoryId)
   }, [editingCategoryId, categories])
 
-  const fetchCategories = useCallback(async (page = currentPage, query = search, limit = pageSize) => {
-    setLoading(true)
-    setError(null)
+  const fetchCategories = useCallback(
+    async (page = currentPage, query = search, limit = pageSize) => {
+      setLoading(true)
+      setError(null)
 
-    try {
-      const params = new URLSearchParams()
-      params.set('page', String(page))
-      params.set('limit', String(limit))
-      if (query.trim()) {
-        params.set('q', query.trim())
-      }
+      try {
+        const params = new URLSearchParams()
+        params.set('page', String(page))
+        params.set('limit', String(limit))
+        if (query.trim()) {
+          params.set('q', query.trim())
+        }
 
-      const res = await fetch(`/api/categories?${params.toString()}`)
-      const data = await res.json()
+        const res = await fetch(`/api/categories?${params.toString()}`)
+        const data = await res.json()
 
-      if (!res.ok || !data.success) {
-        setError(data.error || 'Failed to load categories')
+        if (!res.ok || !data.success) {
+          setError(data.error || 'Failed to load categories')
+          setCategories([])
+          setTotalPages(1)
+          setTotalCategories(0)
+        } else {
+          setCategories(data.data)
+          const pagination = data.pagination as
+            | { page: number; limit: number; total: number; totalPages: number }
+            | undefined
+
+          setCurrentPage(pagination?.page ?? page)
+          setPageSize(pagination?.limit ?? limit)
+          setTotalPages(Math.max(1, pagination?.totalPages ?? 1))
+          setTotalCategories(pagination?.total ?? data.data.length)
+        }
+      } catch {
+        setError('Failed to load categories')
         setCategories([])
         setTotalPages(1)
         setTotalCategories(0)
-      } else {
-        setCategories(data.data)
-        const pagination = data.pagination as
-          | { page: number; limit: number; total: number; totalPages: number }
-          | undefined
-
-        setCurrentPage(pagination?.page ?? page)
-        setPageSize(pagination?.limit ?? limit)
-        setTotalPages(Math.max(1, pagination?.totalPages ?? 1))
-        setTotalCategories(pagination?.total ?? data.data.length)
+      } finally {
+        setLoading(false)
       }
-    } catch {
-      setError('Failed to load categories')
-      setCategories([])
-      setTotalPages(1)
-      setTotalCategories(0)
-    } finally {
-      setLoading(false)
-    }
-  }, [currentPage, pageSize, search])
+    },
+    [currentPage, pageSize, search],
+  )
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -246,15 +249,15 @@ export default function AdminCategoriesPage() {
       <FadeIn>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-text">Categories</h1>
-            <p className="mt-2 text-text-muted">
+            <h1 className="text-text text-3xl font-bold">Categories</h1>
+            <p className="text-text-muted mt-2">
               Manage storefront categories, ordering, and optional parent groups.
             </p>
           </div>
           <button
             type="button"
             onClick={resetForm}
-            className="rounded-lg border border-white/10 px-4 py-2.5 text-sm font-semibold text-text transition-colors hover:border-primary-light hover:text-primary-light"
+            className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-4 py-2.5 text-sm font-semibold transition-colors"
           >
             + New Category
           </button>
@@ -262,23 +265,28 @@ export default function AdminCategoriesPage() {
       </FadeIn>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[420px_1fr]">
-        <FadeIn className="rounded-xl border border-white/5 bg-surface p-5">
-          <h2 className="text-lg font-semibold text-text">{isEditing ? 'Edit Category' : 'Create Category'}</h2>
-          <p className="mt-1 text-sm text-text-muted">
+        <FadeIn className="bg-surface rounded-xl border border-white/5 p-5">
+          <h2 className="text-text text-lg font-semibold">
+            {isEditing ? 'Edit Category' : 'Create Category'}
+          </h2>
+          <p className="text-text-muted mt-1 text-sm">
             {isEditing
               ? 'Update category details and save your changes.'
               : 'Add a new category to organize products.'}
           </p>
 
           {error && (
-            <div className="mt-4 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+            <div className="border-danger/30 bg-danger/10 text-danger mt-4 rounded-lg border px-3 py-2 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={saveCategory} className="mt-5 space-y-4">
             <div>
-              <label htmlFor="category-name" className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+              <label
+                htmlFor="category-name"
+                className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+              >
                 Name
               </label>
               <input
@@ -294,40 +302,53 @@ export default function AdminCategoriesPage() {
                     return { ...state, name, slug: slugify(name) }
                   })
                 }}
-                className="mt-1 w-full rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="category-slug" className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+              <label
+                htmlFor="category-slug"
+                className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+              >
                 Slug
               </label>
               <input
                 id="category-slug"
                 type="text"
                 value={formState.slug}
-                onChange={(e) => setFormState((state) => ({ ...state, slug: slugify(e.target.value) }))}
-                className="mt-1 w-full rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                onChange={(e) =>
+                  setFormState((state) => ({ ...state, slug: slugify(e.target.value) }))
+                }
+                className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="category-description" className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+              <label
+                htmlFor="category-description"
+                className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+              >
                 Description
               </label>
               <textarea
                 id="category-description"
                 value={formState.description}
-                onChange={(e) => setFormState((state) => ({ ...state, description: e.target.value }))}
+                onChange={(e) =>
+                  setFormState((state) => ({ ...state, description: e.target.value }))
+                }
                 rows={3}
-                className="mt-1 w-full rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
               />
             </div>
 
             <div>
-              <label htmlFor="category-image" className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+              <label
+                htmlFor="category-image"
+                className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+              >
                 Image URL
               </label>
               <input
@@ -336,33 +357,43 @@ export default function AdminCategoriesPage() {
                 value={formState.image}
                 onChange={(e) => setFormState((state) => ({ ...state, image: e.target.value }))}
                 placeholder="/images/categories/example.jpg"
-                className="mt-1 w-full rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="category-sort-order" className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+                <label
+                  htmlFor="category-sort-order"
+                  className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+                >
                   Sort Order
                 </label>
                 <input
                   id="category-sort-order"
                   type="number"
                   value={formState.sortOrder}
-                  onChange={(e) => setFormState((state) => ({ ...state, sortOrder: e.target.value }))}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                  onChange={(e) =>
+                    setFormState((state) => ({ ...state, sortOrder: e.target.value }))
+                  }
+                  className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
                 />
               </div>
 
               <div>
-                <label htmlFor="category-parent" className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+                <label
+                  htmlFor="category-parent"
+                  className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+                >
                   Parent Category
                 </label>
                 <select
                   id="category-parent"
                   value={formState.parentId}
-                  onChange={(e) => setFormState((state) => ({ ...state, parentId: e.target.value }))}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                  onChange={(e) =>
+                    setFormState((state) => ({ ...state, parentId: e.target.value }))
+                  }
+                  className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
                 >
                   <option value="">None</option>
                   {availableParents.map((category) => (
@@ -378,7 +409,7 @@ export default function AdminCategoriesPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-light disabled:cursor-not-allowed disabled:opacity-60"
+                className="bg-primary hover:bg-primary-light rounded-lg px-4 py-2 text-sm font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving ? 'Saving...' : isEditing ? 'Save Changes' : 'Create Category'}
               </button>
@@ -386,7 +417,7 @@ export default function AdminCategoriesPage() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-text-muted transition-colors hover:border-white/20 hover:text-text"
+                  className="text-text-muted hover:text-text rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold transition-colors hover:border-white/20"
                 >
                   Cancel
                 </button>
@@ -395,7 +426,10 @@ export default function AdminCategoriesPage() {
           </form>
         </FadeIn>
 
-        <FadeIn className="overflow-hidden rounded-xl border border-white/5 bg-surface" delay={0.08}>
+        <FadeIn
+          className="bg-surface overflow-hidden rounded-xl border border-white/5"
+          delay={0.08}
+        >
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/5 px-4 py-3">
             <div className="flex flex-wrap items-center gap-3">
               <input
@@ -403,13 +437,13 @@ export default function AdminCategoriesPage() {
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by name, slug, or description"
-                className="w-72 rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text placeholder:text-text-dark focus:border-primary focus:outline-none"
+                className="bg-background text-text placeholder:text-text-dark focus:border-primary w-72 rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
               />
 
               <select
                 value={String(pageSize)}
                 onChange={(e) => handlePageSizeChange(e.target.value)}
-                className="rounded-lg border border-white/10 bg-background px-3 py-2 text-sm text-text focus:border-primary focus:outline-none"
+                className="bg-background text-text focus:border-primary rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
               >
                 <option value="10">10 / page</option>
                 <option value="20">20 / page</option>
@@ -417,28 +451,28 @@ export default function AdminCategoriesPage() {
               </select>
             </div>
 
-            <p className="text-sm text-text-muted">{totalCategories} categories total</p>
+            <p className="text-text-muted text-sm">{totalCategories} categories total</p>
           </div>
 
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/5">
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                   Category
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                   Slug
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                   Parent
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                   Products
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider uppercase">
                   Order
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="text-text-muted px-4 py-3 text-right text-xs font-semibold tracking-wider uppercase">
                   Actions
                 </th>
               </tr>
@@ -446,13 +480,13 @@ export default function AdminCategoriesPage() {
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-text-muted">
+                  <td colSpan={6} className="text-text-muted px-4 py-8 text-center">
                     Loading categories...
                   </td>
                 </tr>
               ) : categories.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-text-muted">
+                  <td colSpan={6} className="text-text-muted px-4 py-8 text-center">
                     No categories found.
                   </td>
                 </tr>
@@ -466,7 +500,7 @@ export default function AdminCategoriesPage() {
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 overflow-hidden rounded-lg bg-surface-light">
+                        <div className="bg-surface-light h-10 w-10 overflow-hidden rounded-lg">
                           {category.image ? (
                             <Image
                               src={category.image}
@@ -476,38 +510,42 @@ export default function AdminCategoriesPage() {
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center text-[10px] uppercase tracking-wider text-text-dark">
+                            <div className="text-text-dark flex h-full w-full items-center justify-center text-[10px] tracking-wider uppercase">
                               N/A
                             </div>
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-text">{category.name}</p>
+                          <p className="text-text text-sm font-medium">{category.name}</p>
                           {category.description && (
-                            <p className="line-clamp-1 max-w-xs text-xs text-text-muted">
+                            <p className="text-text-muted line-clamp-1 max-w-xs text-xs">
                               {category.description}
                             </p>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-sm text-text-muted">{category.slug}</td>
-                    <td className="px-4 py-3 text-sm text-text-muted">{category.parent?.name || '-'}</td>
-                    <td className="px-4 py-3 text-sm text-text-muted">{category._count.products}</td>
-                    <td className="px-4 py-3 text-sm text-text-muted">{category.sortOrder}</td>
+                    <td className="text-text-muted px-4 py-3 text-sm">{category.slug}</td>
+                    <td className="text-text-muted px-4 py-3 text-sm">
+                      {category.parent?.name || '-'}
+                    </td>
+                    <td className="text-text-muted px-4 py-3 text-sm">
+                      {category._count.products}
+                    </td>
+                    <td className="text-text-muted px-4 py-3 text-sm">{category.sortOrder}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-3">
                         <button
                           type="button"
                           onClick={() => populateForEdit(category)}
-                          className="text-xs text-primary-light hover:underline"
+                          className="text-primary-light text-xs hover:underline"
                         >
                           Edit
                         </button>
                         <button
                           type="button"
                           onClick={() => void deleteCategory(category)}
-                          className="text-xs text-danger hover:underline"
+                          className="text-danger text-xs hover:underline"
                         >
                           Delete
                         </button>
@@ -520,7 +558,7 @@ export default function AdminCategoriesPage() {
           </table>
 
           <div className="flex items-center justify-between border-t border-white/5 px-4 py-3">
-            <p className="text-sm text-text-muted">
+            <p className="text-text-muted text-sm">
               Page {currentPage} of {totalPages}
             </p>
             <div className="flex items-center gap-2">
@@ -528,7 +566,7 @@ export default function AdminCategoriesPage() {
                 type="button"
                 disabled={!canGoPrev || loading}
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-text transition-colors hover:border-primary-light hover:text-primary-light disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-3 py-1.5 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Previous
               </button>
@@ -536,7 +574,7 @@ export default function AdminCategoriesPage() {
                 type="button"
                 disabled={!canGoNext || loading}
                 onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-text transition-colors hover:border-primary-light hover:text-primary-light disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-3 py-1.5 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Next
               </button>

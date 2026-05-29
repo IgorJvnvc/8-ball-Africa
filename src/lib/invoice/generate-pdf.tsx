@@ -45,7 +45,15 @@ const styles = StyleSheet.create({
   totalLabel: { width: 100, textAlign: 'right', paddingRight: 12, color: '#475569' },
   totalValue: { width: 80, textAlign: 'right' },
   grandTotal: { fontFamily: 'Helvetica-Bold', fontSize: 13, color: '#1e40af' },
-  footer: { position: 'absolute', bottom: 30, left: 40, right: 40, textAlign: 'center', color: '#94a3b8', fontSize: 8 },
+  footer: {
+    position: 'absolute',
+    bottom: 30,
+    left: 40,
+    right: 40,
+    textAlign: 'center',
+    color: '#94a3b8',
+    fontSize: 8,
+  },
 })
 
 function InvoicePDF({ data }: { data: InvoiceData }) {
