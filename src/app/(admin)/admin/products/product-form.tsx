@@ -47,6 +47,27 @@ function slugify(value: string) {
 
 const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MIN_IMAGE_WIDTH = 400
+const MIN_IMAGE_HEIGHT = 400
+
+function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file)
+    const image = new window.Image()
+
+    image.onload = () => {
+      resolve({ width: image.naturalWidth, height: image.naturalHeight })
+      URL.revokeObjectURL(objectUrl)
+    }
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error('Failed to read image dimensions'))
+    }
+
+    image.src = objectUrl
+  })
+}
 
 export function ProductForm({ mode, initialValues, categories, onSubmit }: ProductFormProps) {
   const router = useRouter()
@@ -120,7 +141,12 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
 
   const resetUploadState = () => {
     setSelectedImageFile(null)
-    setUploadPreviewUrl(null)
+    setUploadPreviewUrl((prevUrl) => {
+      if (prevUrl) {
+        URL.revokeObjectURL(prevUrl)
+      }
+      return null
+    })
     setUploadError(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -135,20 +161,30 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
     }
   }, [uploadPreviewUrl])
 
-  const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null
     setUploadError(null)
 
     if (!file) {
       setSelectedImageFile(null)
-      setUploadPreviewUrl(null)
+      setUploadPreviewUrl((prevUrl) => {
+        if (prevUrl) {
+          URL.revokeObjectURL(prevUrl)
+        }
+        return null
+      })
       return
     }
 
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
       setUploadError('Unsupported file type. Use JPG, PNG, WEBP, or GIF.')
       setSelectedImageFile(null)
-      setUploadPreviewUrl(null)
+      setUploadPreviewUrl((prevUrl) => {
+        if (prevUrl) {
+          URL.revokeObjectURL(prevUrl)
+        }
+        return null
+      })
       event.target.value = ''
       return
     }
@@ -156,13 +192,53 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
     if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
       setUploadError('File is too large (max 4MB).')
       setSelectedImageFile(null)
-      setUploadPreviewUrl(null)
+      setUploadPreviewUrl((prevUrl) => {
+        if (prevUrl) {
+          URL.revokeObjectURL(prevUrl)
+        }
+        return null
+      })
+      event.target.value = ''
+      return
+    }
+
+    try {
+      const { width, height } = await getImageDimensions(file)
+
+      if (width < MIN_IMAGE_WIDTH || height < MIN_IMAGE_HEIGHT) {
+        setUploadError(
+          `Image must be at least ${MIN_IMAGE_WIDTH}x${MIN_IMAGE_HEIGHT} pixels. Selected image is ${width}x${height}.`,
+        )
+        setSelectedImageFile(null)
+        setUploadPreviewUrl((prevUrl) => {
+          if (prevUrl) {
+            URL.revokeObjectURL(prevUrl)
+          }
+          return null
+        })
+        event.target.value = ''
+        return
+      }
+    } catch {
+      setUploadError('Could not read image dimensions. Please try another image.')
+      setSelectedImageFile(null)
+      setUploadPreviewUrl((prevUrl) => {
+        if (prevUrl) {
+          URL.revokeObjectURL(prevUrl)
+        }
+        return null
+      })
       event.target.value = ''
       return
     }
 
     setSelectedImageFile(file)
-    setUploadPreviewUrl(URL.createObjectURL(file))
+    setUploadPreviewUrl((prevUrl) => {
+      if (prevUrl) {
+        URL.revokeObjectURL(prevUrl)
+      }
+      return URL.createObjectURL(file)
+    })
   }
 
   const uploadSelectedImage = async () => {
@@ -178,7 +254,7 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
       const formData = new FormData()
       formData.append('file', selectedImageFile)
 
-      const res = await fetch('/api/upload', {
+      const res = await fetch('/api/upload?folder=products', {
         method: 'POST',
         body: formData,
       })
@@ -562,7 +638,9 @@ export function ProductForm({ mode, initialValues, categories, onSubmit }: Produ
                   disabled={isSubmitting || isUploadingImage}
                   className="text-text mt-2 block w-full text-sm file:mr-3 file:cursor-pointer file:rounded-lg file:border file:border-white/10 file:bg-transparent file:px-3 file:py-2 file:text-sm file:font-medium"
                 />
-                <p className="text-text-muted mt-2 text-xs">JPG, PNG, WEBP, or GIF up to 4MB.</p>
+                <p className="text-text-muted mt-2 text-xs">
+                  JPG, PNG, WEBP, or GIF. Max 4MB and minimum 400x400px.
+                </p>
 
                 {uploadPreviewUrl && (
                   <div className="mt-3 flex items-center gap-3">

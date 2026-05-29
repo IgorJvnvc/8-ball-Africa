@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/animations/fade-in'
 
@@ -44,7 +44,37 @@ function slugify(value: string) {
     .replace(/-+/g, '-')
 }
 
+const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MIN_IMAGE_WIDTH = 400
+const MIN_IMAGE_HEIGHT = 400
+
+function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file)
+    const image = new window.Image()
+
+    image.onload = () => {
+      resolve({ width: image.naturalWidth, height: image.naturalHeight })
+      URL.revokeObjectURL(objectUrl)
+    }
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error('Failed to read image dimensions'))
+    }
+
+    image.src = objectUrl
+  })
+}
+
+function isDisplayableImageSrc(value: string) {
+  const trimmed = value.trim()
+  return trimmed.startsWith('/') || /^https?:\/\//i.test(trimmed)
+}
+
 export default function AdminCategoriesPage() {
+  const categoryFileInputRef = useRef<HTMLInputElement | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -56,6 +86,11 @@ export default function AdminCategoriesPage() {
   const [formState, setFormState] = useState<CategoryFormState>(emptyFormState)
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [imageInputMode, setImageInputMode] = useState<'url' | 'upload'>('url')
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null)
+  const [uploadPreviewUrl, setUploadPreviewUrl] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
 
   const isEditing = editingCategoryId !== null
 
@@ -120,10 +155,126 @@ export default function AdminCategoriesPage() {
     }
   }, [currentPage, pageSize, search, fetchCategories])
 
+  useEffect(() => {
+    return () => {
+      if (uploadPreviewUrl) {
+        URL.revokeObjectURL(uploadPreviewUrl)
+      }
+    }
+  }, [uploadPreviewUrl])
+
+  const clearSelectedImage = () => {
+    setSelectedImageFile(null)
+    setUploadPreviewUrl((prevUrl) => {
+      if (prevUrl) {
+        URL.revokeObjectURL(prevUrl)
+      }
+      return null
+    })
+
+    if (categoryFileInputRef.current) {
+      categoryFileInputRef.current.value = ''
+    }
+  }
+
+  const resetUploadState = () => {
+    clearSelectedImage()
+    setUploadError(null)
+  }
+
+  const handleImageFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null
+    setUploadError(null)
+
+    if (!file) {
+      clearSelectedImage()
+      return
+    }
+
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      clearSelectedImage()
+      setUploadError('Unsupported file type. Use JPG, PNG, WEBP, or GIF.')
+      return
+    }
+
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      clearSelectedImage()
+      setUploadError('File is too large (max 4MB).')
+      return
+    }
+
+    try {
+      const { width, height } = await getImageDimensions(file)
+
+      if (width < MIN_IMAGE_WIDTH || height < MIN_IMAGE_HEIGHT) {
+        clearSelectedImage()
+        setUploadError(
+          `Image must be at least ${MIN_IMAGE_WIDTH}x${MIN_IMAGE_HEIGHT} pixels. Selected image is ${width}x${height}.`,
+        )
+        return
+      }
+    } catch {
+      clearSelectedImage()
+      setUploadError('Could not read image dimensions. Please try another image.')
+      return
+    }
+
+    setSelectedImageFile(file)
+    setUploadPreviewUrl((prevUrl) => {
+      if (prevUrl) {
+        URL.revokeObjectURL(prevUrl)
+      }
+      return URL.createObjectURL(file)
+    })
+  }
+
+  const uploadSelectedImage = async () => {
+    if (!selectedImageFile) {
+      setUploadError('Select an image before uploading.')
+      return
+    }
+
+    setUploadError(null)
+    setIsUploadingImage(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', selectedImageFile)
+
+      const res = await fetch('/api/upload?folder=categories', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = (await res.json()) as {
+        success: boolean
+        error?: string
+        data?: { url?: string }
+      }
+
+      const uploadedUrl = data.data?.url?.trim()
+
+      if (!res.ok || !data.success || !uploadedUrl) {
+        setUploadError(data.error || 'Failed to upload image')
+        return
+      }
+
+      setFormState((state) => ({ ...state, image: uploadedUrl }))
+      setImageInputMode('url')
+      resetUploadState()
+    } catch {
+      setUploadError('Failed to upload image')
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }
+
   const resetForm = () => {
     setFormState(emptyFormState)
     setEditingCategoryId(null)
     setError(null)
+    setImageInputMode('url')
+    resetUploadState()
   }
 
   const populateForEdit = (category: Category) => {
@@ -137,6 +288,8 @@ export default function AdminCategoriesPage() {
       parentId: category.parentId || '',
     })
     setError(null)
+    setImageInputMode('url')
+    resetUploadState()
   }
 
   const saveCategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -345,20 +498,117 @@ export default function AdminCategoriesPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="category-image"
-                className="text-text-muted text-xs font-semibold tracking-wide uppercase"
-              >
-                Image URL
-              </label>
-              <input
-                id="category-image"
-                type="text"
-                value={formState.image}
-                onChange={(e) => setFormState((state) => ({ ...state, image: e.target.value }))}
-                placeholder="/images/categories/example.jpg"
-                className="bg-background text-text focus:border-primary mt-1 w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
-              />
+              <p className="text-text-muted text-xs font-semibold tracking-wide uppercase">Image</p>
+
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageInputMode('url')
+                    setUploadError(null)
+                  }}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    imageInputMode === 'url'
+                      ? 'bg-primary/10 text-primary border-primary/40'
+                      : 'text-text hover:border-primary-light hover:text-primary-light border-white/10'
+                  }`}
+                >
+                  Add via URL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageInputMode('upload')
+                    setUploadError(null)
+                  }}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    imageInputMode === 'upload'
+                      ? 'bg-primary/10 text-primary border-primary/40'
+                      : 'text-text hover:border-primary-light hover:text-primary-light border-white/10'
+                  }`}
+                >
+                  Upload image
+                </button>
+              </div>
+
+              {imageInputMode === 'url' ? (
+                <div className="mt-3 space-y-2">
+                  <label
+                    htmlFor="category-image"
+                    className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+                  >
+                    Image URL
+                  </label>
+                  <input
+                    id="category-image"
+                    type="text"
+                    value={formState.image}
+                    onChange={(e) => setFormState((state) => ({ ...state, image: e.target.value }))}
+                    placeholder="/images/categories/example.jpg"
+                    className="bg-background text-text focus:border-primary w-full rounded-lg border border-white/10 px-3 py-2 text-sm focus:outline-none"
+                  />
+                  {formState.image.trim().length > 0 && !isDisplayableImageSrc(formState.image) && (
+                    <p className="text-danger text-xs">
+                      Enter a valid image path (starts with /) or a full http/https URL.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="mt-3 space-y-3 rounded-lg border border-white/10 bg-black/10 p-3">
+                  <div>
+                    <label
+                      htmlFor="category-image-upload"
+                      className="text-text-muted text-xs font-semibold tracking-wide uppercase"
+                    >
+                      Select Image
+                    </label>
+                    <input
+                      ref={categoryFileInputRef}
+                      id="category-image-upload"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      onChange={(event) => void handleImageFileChange(event)}
+                      disabled={saving || isUploadingImage}
+                      className="text-text mt-2 block w-full text-sm file:mr-3 file:cursor-pointer file:rounded-lg file:border file:border-white/10 file:bg-transparent file:px-3 file:py-2 file:text-sm file:font-medium"
+                    />
+                    <p className="text-text-muted mt-2 text-xs">
+                      JPG, PNG, WEBP, or GIF. Max 4MB and minimum 400x400px.
+                    </p>
+                  </div>
+
+                  {uploadPreviewUrl && (
+                    <div className="flex items-center gap-3">
+                      <div
+                        aria-label="Selected category image preview"
+                        className="h-16 w-16 rounded-lg border border-white/10 bg-cover bg-center"
+                        style={{ backgroundImage: `url('${uploadPreviewUrl}')` }}
+                      />
+                      <p className="text-text text-sm">{selectedImageFile?.name}</p>
+                    </div>
+                  )}
+
+                  {uploadError && <p className="text-danger text-xs">{uploadError}</p>}
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void uploadSelectedImage()}
+                      disabled={!selectedImageFile || saving || isUploadingImage}
+                      className="bg-primary hover:bg-primary-light rounded-lg px-3 py-2 text-sm font-semibold text-white transition-colors disabled:opacity-60"
+                    >
+                      {isUploadingImage ? 'Uploading...' : 'Upload & Use Image'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetUploadState}
+                      disabled={saving || isUploadingImage}
+                      className="text-text hover:border-primary-light hover:text-primary-light rounded-lg border border-white/10 px-3 py-2 text-sm font-medium transition-colors disabled:opacity-60"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
